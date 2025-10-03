@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>نتائج الفحوصات الطبية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    /* الخطوط والإعدادات الأساسية */
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+
+    :root {
+        /* الألوان الرئيسية */
+        --primary-color: #2563eb;
+        --secondary-color: #64748b;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        
+        /* الخلفيات */
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        
+        /* النصوص */
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        
+        /* الحدود */
+        --border-color: #e2e8f0;
+        --border-radius: 8px;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Cairo', sans-serif;
+        background-color: var(--bg-secondary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        padding: 20px;
+        direction: rtl;
+        text-align: right;
+    }
+
+    /* العناوين */
+    h1, h2 {
+        color: var(--primary-color);
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 2rem;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin-top: 30px;
+    }
+
+    /* نموذج الإدخال */
+    form {
+        background-color: var(--bg-primary);
+        padding: 20px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        font-family: 'Cairo', sans-serif;
+        font-size: 1rem;
+    }
+
+    input:focus, select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+
+    button {
+        cursor: pointer;
+        font-family: 'Cairo', sans-serif;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+    }
+
+    .btn:hover {
+        background-color: #1d4ed8;
+        transform: translateY(-2px);
+    }
+
+    .btn-success {
+        background-color: var(--success-color);
+    }
+
+    .btn-success:hover {
+        background-color: #059669;
+    }
+
+    .btn-add {
+        display: block;
+        margin: 20px auto;
+        padding: 8px 20px;
+    }
+
+    #saveBtn {
+        width: 100%;
+        margin-top: 20px;
+        padding: 12px;
+    }
+
+    /* جدول الفحوصات */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: var(--bg-primary);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: right;
+    }
+
+    th {
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+        background-color: var(--bg-secondary);
+    }
+
+    tr:hover {
+        background-color: rgba(37, 99, 235, 0.05);
+    }
+
+    td button {
+        background-color: var(--secondary-color);
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: var(--border-radius);
+        font-size: 0.9rem;
+        margin: 0 2px;
+    }
+
+    td button.btn-edit {
+        background-color: var(--warning-color);
+    }
+
+    td button.btn-edit:hover {
+        background-color: #d97706;
+    }
+
+    td button.btn-delete {
+        background-color: var(--danger-color);
+    }
+
+    td button.btn-delete:hover {
+        background-color: #dc2626;
+    }
+
+    td button.btn-view {
+        background-color: var(--primary-color);
+    }
+
+    td button.btn-view:hover {
+        background-color: #1d4ed8;
+    }
+
+    td button.btn-print {
+        background-color: var(--secondary-color);
+    }
+
+    td button.btn-print:hover {
+        background-color: #475569;
+    }
+
+    /* رسالة عدم وجود فحوصات */
+    tr td[colspan] {
+        text-align: center;
+        padding: 20px;
+        color: var(--text-secondary);
+        font-style: italic;
+    }
+
+    /* تصميم متجاوب */
+    @media (max-width: 768px) {
+        table {
+            display: block;
+            overflow-x: auto;
+        }
+        
+        form {
+            padding: 15px;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+        }
+        
+        h2 {
+            font-size: 1.3rem;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+    }
+
+    /* تحسينات إضافية */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .alert {
+        padding: 10px;
+        border-radius: var(--border-radius);
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .alert-success {
+        background-color: rgba(16, 185, 129, 0.2);
+        color: var(--success-color);
+        border: 1px solid var(--success-color);
+    }
+
+    .alert-error {
+        background-color: rgba(239, 68, 68, 0.2);
+        color: var(--danger-color);
+        border: 1px solid var(--danger-color);
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    /* تنسيق صف المجموع */
+    .total-row {
+        background-color: rgba(16, 185, 129, 0.1);
+        font-weight: bold;
+    }
+
+    .total-row td {
+        border-top: 2px solid var(--success-color);
+    }
+
+    /* تنسيق حقل السعر */
+    .price-field {
+        font-weight: bold;
+        color: var(--success-color);
+    }
+
+    /* تنسيق المبلغ الإجمالي */
+    .total-amount {
+        font-weight: bold;
+        color: var(--success-color);
+        font-size: 1.1em;
+    }
+
+    /* تنسيق النافذة المنبثقة */
+    .details-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: var(--bg-primary);
+        padding: 20px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        max-width: 90%;
+        max-height: 90%;
+        overflow-y: auto;
+    }
+
+    .details-modal h3 {
+        color: var(--primary-color);
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .details-modal button {
+        margin-top: 15px;
+        margin-left: 5px;
+    }
+
+    /* تنسيق فلتر البحث */
+    .filter-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 15px;
+        background-color: var(--bg-primary);
+        padding: 15px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .filter-container input, .filter-container button {
+        margin: 0;
+    }
+
+    /* تنسيق الخلفية المعتمة */
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+</style>
+<body>
+    <div class="container">
+        <h1>إدارة نتائج الفحوصات الطبية</h1>
+
+        <div id="alertContainer" class="hidden"></div>
+
+        <!-- نموذج بيانات المريض -->
+        <form id="patientForm">
+            <h2>بيانات المريض</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="patientName">اسم المريض:</label>
+                    <input type="text" id="patientName" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientAge">العمر:</label>
+                    <input type="number" id="patientAge" min="0" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="patientGender">الجنس:</label>
+                    <select id="patientGender" required>
+                        <option value="">-- اختر --</option>
+                        <option value="ذكر">ذكر</option>
+                        <option value="أنثى">أنثى</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="patientID">رقم الملف:</label>
+                    <input type="text" id="patientID" required>
+                </div>
+            </div>
+
+            <h2>نتائج الفحوصات</h2>
+            <table id="testsTable">
+                <thead>
+                    <tr>
+                        <th>اسم الفحص</th>
+                        <th>النتيجة</th>
+                        <th>الوحدة</th>
+                        <th>القيمة المرجعية</th>
+                        <th>السعر</th>
+                        <th>ملاحظات</th>
+                        <th>إجراء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- سيتم إضافة الصفوف ديناميكياً -->
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="4" style="text-align: left; font-weight: bold;">المبلغ الإجمالي:</td>
+                        <td id="totalAmount" class="total-amount">0.00 ريال</td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <button type="button" id="addTestBtn" class="btn btn-add">+ إضافة فحص</button>
+            <button type="submit" id="saveBtn" class="btn btn-success">حفظ النتائج</button>
+        </form>
+
+        <h2>سجل نتائج الفحوصات</h2>
+        
+        <!-- فلتر البحث -->
+        <div class="filter-container">
+            <input type="text" id="patientFilter" placeholder="بحث باسم المريض" oninput="filterResults()">
+            <input type="date" id="dateFilter" onchange="filterResults()">
+            <button onclick="resetFilters()" class="btn">إعادة تعيين الفلتر</button>
+        </div>
+        
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>اسم المريض</th>
+                    <th>العمر</th>
+                    <th>الجنس</th>
+                    <th>رقم الملف</th>
+                    <th>عدد الفحوصات</th>
+                    <th>المبلغ الإجمالي</th>
+                    <th>تاريخ الإدخال</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- سيتم عرض البيانات هنا -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // متغيرات عامة
+        let db;
+        let editingId = null;
+        const patientForm = document.getElementById("patientForm");
+        const testsTableBody = document.querySelector("#testsTable tbody");
+        const resultsTableBody = document.querySelector("#resultsTable tbody");
+        const addTestBtn = document.getElementById("addTestBtn");
+        const alertContainer = document.getElementById("alertContainer");
+        const totalAmountElement = document.getElementById("totalAmount");
+
+        // فتح قاعدة البيانات
+        const request = indexedDB.open("LabManagementDB", 1);
+
+        request.onupgradeneeded = function(event) {
+            db = event.target.result;
+            
+            // إنشاء مخزن الفحوصات إذا لم يكن موجوداً
+            if(!db.objectStoreNames.contains("tests")) {
+                const testsStore = db.createObjectStore("tests", { keyPath: "id", autoIncrement: true });
+                testsStore.createIndex("name", "name", { unique: true });
+            }
+            
+            // إنشاء مخزن النتائج إذا لم يكن موجوداً
+            if(!db.objectStoreNames.contains("results")) {
+                const resultsStore = db.createObjectStore("results", { keyPath: "id", autoIncrement: true });
+                resultsStore.createIndex("patientID", "patientID", { unique: false });
+                resultsStore.createIndex("date", "date", { unique: false });
+            }
+        };
+
+        request.onsuccess = function(event) {
+            db = event.target.result;
+            // تحميل البيانات عند بدء التطبيق
+            loadResults();
+            addInitialTestRow();
+        };
+
+        request.onerror = function(event) {
+            showAlert("خطأ في فتح قاعدة البيانات: " + event.target.errorCode, "error");
+        };
+
+        // إضافة صف فحص جديد
+        addTestBtn.addEventListener("click", function() {
+            addTestRow();
+        });
+
+        // حفظ النتائج عند تقديم النموذج
+        patientForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            if (confirm("هل أنت متأكد من حفظ النتائج؟")) {
+                saveResults();
+            }
+        });
+
+        // إضافة صف فحص أولي
+        function addInitialTestRow() {
+            if (testsTableBody.children.length === 0) {
+                addTestRow();
+            }
+        }
+
+        // إضافة صف فحص جديد
+        function addTestRow(testData = null) {
+            const row = document.createElement("tr");
+            const rowIndex = testsTableBody.children.length;
+            
+            row.innerHTML = `
+                <td>
+                    <select name="test_name[]" required onchange="updateTestDetails(this, ${rowIndex})">
+                        <option value="">-- اختر الفحص --</option>
+                        <!-- سيتم تحميل الفحوصات ديناميكياً -->
+                    </select>
+                </td>
+                <td>
+                    <select name="result[]" required>
+
+                        <option value="">-- اختر --</option>
+                        
+                          <option value="00 g/l">00 g/l</option> 
+    <option value="01 g/l">01 g/l</option> 
+    <option value="02 g/l">02 g/l</option> 
+    <option value="03 g/l">03 g/l</option> 
+    <option value="0.4 g/l">0.4 g/l</option> 
+    <option value="0.5 g/l">0.5 g/l</option> 
+    <option value="0.55 g/l">0.55 g/l</option> 
+    <option value="0.56 g/l">0.56 g/l</option> 
+    <option value="0.57 g/l">0.57 g/l</option> 
+    <option value="0.58 g/l">0.58 g/l</option> 
+    <option value="0.59 g/l">0.59 g/l</option> 
+    <option value="0.60 g/l">0.60 g/l</option> 
+    <option value="0.61 g/l">0.61 g/l</option> 
+    <option value="0.62 g/l">0.62 g/l</option> 
+    <option value="0.63 g/l">0.63 g/l</option> 
+    <option value="0.64 g/l">0.64 g/l</option> 
+    <option value="0.65 g/l">0.65 g/l</option> 
+    <option value="0.66 g/l">0.66 g/l</option> 
+    <option value="0.67 g/l">0.67 g/l</option> 
+    <option value="0.68 g/l">0.68 g/l</option> 
+    <option value="0.69 g/l">0.69 g/l</option> 
+    <option value="0.70 g/l">0.70 g/l</option> 
+    <option value="0.71 g/l">0.71 g/l</option> 
+    <option value="0.72 g/l">0.72 g/l</option> 
+    <option value="0.73 g/l">0.73 g/l</option> 
+    <option value="0.74 g/l">0.74 g/l</option> 
+    <option value="0.75 g/l">0.75 g/l</option> 
+    <option value="0.76 g/l">0.76 g/l</option> 
+    <option value="0.77 g/l">0.77 g/l</option> 
+    <option value="0.78 g/l">0.78 g/l</option> 
+    <option value="0.79 g/l">0.79 g/l</option> 
+    <option value="0.80 g/l">0.80 g/l</option> 
+    <option value="0.81 g/l">0.81 g/l</option> 
+    <option value="0.82 g/l">0.82 g/l</option> 
+    <option value="0.83 g/l">0.83 g/l</option> 
+    <option value="0.84 g/l">0.84 g/l</option> 
+    <option value="0.85 g/l">0.85 g/l</option> 
+    <option value="0.86 g/l">0.86 g/l</option> 
+    <option value="0.87 g/l">0.87 g/l</option> 
+    <option value="0.88 g/l">0.88 g/l</option> 
+    <option value="0.89 g/l">0.89 g/l</option> 
+    <option value="0.90 g/l">0.90 g/l</option> 
+    <option value="0.91 g/l">0.91 g/l</option> 
+    <option value="0.92 g/l">0.92 g/l</option> 
+    <option value="0.93 g/l">0.93 g/l</option> 
+    <option value="0.94 g/l">0.94 g/l</option> 
+    <option value="0.95 g/l">0.95 g/l</option> 
+    <option value="0.97 g/l">0.97 g/l</option> 
+    <option value="0.98 g/l">0.98 g/l</option> 
+    <option value="0.99 g/l">0.99 g/l</option> 
+    <option value="1.00 g/l">1.00 g/l</option> 
+    <option value="1.01 g/l">1.01 g/l</option> 
+    <option value="1.02 g/l">1.02 g/l</option> 
+    <option value="1.03 g/l">1.03 g/l</option> 
+    <option value="1.04 g/l">1.04 g/l</option> 
+    <option value="1.05 g/l">1.05 g/l</option> 
+    <option value="1.06 g/l">1.06 g/l</option> 
+    <option value="1.07 g/l">1.07 g/l</option> 
+    <option value="1.08 g/l">1.08 g/l</option> 
+    <option value="1.09 g/l">1.09 g/l</option> 
+    <option value="1.10 g/l">1.10 g/l</option> 
+    <option value="1.11 g/l">1.11 g/l</option> 
+    <option value="1.12 g/l">1.12 g/l</option> 
+    <option value="1.13 g/l">1.13 g/l</option> 
+    <option value="1.14 g/l">1.14 g/l</option> 
+    <option value="1.15 g/l">1.15 g/l</option> 
+    <option value="1.16 g/l">1.16 g/l</option> 
+    <option value="1.17 g/l">1.17 g/l</option> 
+    <option value="1.18 g/l">1.18 g/l</option> 
+    <option value="1.19 g/l">1.19 g/l</option> 
+    <option value="1.20 g/l">1.20 g/l</option> 
+    <option value="1.21 g/l">1.21 g/l</option> 
+    <option value="1.22 g/l">1.22 g/l</option> 
+    <option value="1.23 g/l">1.23 g/l</option> 
+    <option value="1.24 g/l">1.24 g/l</option> 
+    <option value="1.25 g/l">1.25 g/l</option> 
+    <option value="1.26 g/l">1.26 g/l</option> 
+    <option value="1.27 g/l">1.27 g/l</option> 
+    <option value="1.28 g/l">1.28 g/l</option> 
+    <option value="1.29 g/l">1.29 g/l</option> 
+    <option value="1.30 g/l">1.30 g/l</option> 
+    <option value="1.31 g/l">1.31 g/l</option> 
+    <option value="1.32 g/l">1.32 g/l</option> 
+    <option value="1.33 g/l">1.33 g/l</option> 
+    <option value="1.34 g/l">1.34 g/l</option> 
+    <option value="1.35 g/l">1.35 g/l</option> 
+    <option value="1.36 g/l">1.36 g/l</option> 
+    <option value="1.37 g/l">1.37 g/l</option> 
+    <option value="1.38 g/l">1.38 g/l</option> 
+    <option value="1.39 g/l">1.39 g/l</option> 
+    <option value="1.40 g/l">1.40 g/l</option> 
+    <option value="1.41 g/l">1.41 g/l</option> 
+    <option value="1.42 g/l">1.42 g/l</option> 
+    <option value="1.43 g/l">1.43 g/l</option> 
+    <option value="1.44 g/l">1.44 g/l</option> 
+    <option value="1.45 g/l">1.45 g/l</option> 
+    <option value="1.46 g/l">1.46 g/l</option> 
+    <option value="1.47 g/l">1.47 g/l</option> 
+    <option value="1.48 g/l">1.48 g/l</option> 
+    <option value="1.49 g/l">1.49 g/l</option> 
+    <option value="1.50 g/l">1.50 g/l</option> 
+    <option value="1.51 g/l">1.51 g/l</option> 
+    <option value="1.52 g/l">1.52 g/l</option> 
+    <option value="1.53 g/l">1.53 g/l</option> 
+    <option value="1.54 g/l">1.54 g/l</option> 
+    <option value="1.55 g/l">1.55 g/l</option> 
+    <option value="1.56 g/l">1.56 g/l</option> 
+
+    <option value="voir la fiche">voir la fiche</option> 
+    <option value="++ ve (14 TPF /100 CHAMPS ) Densite moyenne">++ ve (14 TPF /100 CHAMPS ) Densite moyenne</option> 
+    <option value="++ ve (14 TPF /100 CHAMPS ) Densite Faible">++ ve (14 TPF /100 CHAMPS ) Densite Faible</option> 
+    <option value="++ ve (14 TPF /100 CHAMPS ) Densite Forte">++ ve (14 TPF /100 CHAMPS ) Densite Forte</option> 
+    <option value="++ ve (14 TPF /100 CHAMPS ) Densite elevee">++ ve (14 TPF /100 CHAMPS ) Densite elevee</option> 
+    <option value="reaction positive(+)">reaction positive(+)</option> 
+    <option value="1.60 g/l">1.60 g/l</option> 
+    <option value="1.61 g/l">1.61 g/l</option> 
+    <option value="1.62 g/l">1.62 g/l</option> 
+    <option value="1.63 g/l">1.63 g/l</option> 
+    <option value="1.64 g/l">1.64 g/l</option> 
+    <option value="1.65 g/l">1.65 g/l</option> 
+    <option value="1.66 g/l">1.66 g/l</option> 
+    <option value="Test positif (+)">Test positif (+)</option> 
+    <option value="Test négatif au détermine HIV 1/2 (−)">Test négatif au détermine HIV 1/2 (−)</option> 
+    <option value="5.05 ng/ml">5.05 ng/ml</option> 
+    <option value="GS=O Rh positif(O+)">GS=O Rh positif(O+)</option> 
+    <option value="GS=O Rh negatif(O−)">GS=O Rh negatif(O−)</option> 
+    <option value="GS=A Rh= positif(A+)">GS=A Rh= positif(A+)</option> 
+    <option value="GS=A Rh negatif (A−)">GS=A Rh negatif (A−)</option> 
+    <option value="GS= B Rh= positif(B+)">GS= B Rh= positif(B+)</option> 
+    <option value="GS= B Rh= négatif (B−)">GS= B Rh= négatif (B−)</option> 
+    <option value="GS=AB Rh= positif (AB+)">GS=AB Rh= positif (AB+)</option> 
+    <option value="Gs=AB Rh negatif(AB−)">Gs=AB Rh negatif(AB−)</option> 
+    <option value="LEU- NIT- URO- PRO- PH6 BLD- SG 1.030 KET- BIL- GLU-">LEU- NIT- URO- PRO- PH6 BLD- SG 1.030 KET- BIL- GLU-</option> 
+    <option value="test négatif à l'AgHBS (−)">test négatif à l'AgHBS (−)</option> 
+    <option value="test négatif au BW(−)">test négatif au BW(−)</option> 
+    <option value="test négatif au HCV(−)">test négatif au HCV(−)</option> 
+    <option value="test négatif (−)">test négatif (−)</option> 
+    <option value="test positif(+)">test positif(+)</option> 
+    <option value="test positif au HCG dans le sérum (+)">test positif au HCG dans le sérum (+)</option> 
+    <option value="test positif au HCG dans les urines(+)">test positif au HCG dans les urines(+)</option> 
+    <option value="test négatif au HCG dans le sérum (−)">test négatif au HCG dans le sérum (−)</option> 
+    <option value="test négatif au HCG dans les urines (−)">test négatif au HCG dans les urines (−)</option> 
+    <option value="mm3/30min">mm3/30min</option> 
+    <option value="IgM +">IgM +</option> 
+    <option value="IgG +">IgG +</option> 
+    <option value="%">%</option> 
+                        
+                    </select>
+                </td>
+                <td>
+                      <select name="unit[]" > 
+                       <option value="reference"> reference </option> 
+                        </select>
+                </td>
+                <td>
+                     
+                    <select name="reference[]" > 
+    <option value="">-- Choisissez un élément  --</option> 
+    <option value="0.74 aˋ 1.06 g/l">0.74 aˋ 1.06 g/l</option> 
+    <option value="3.5 aˋ 5.5 mmol/l">3.5 aˋ 5.5 mmol/l</option> 
+    <option value="aucune">aucune</option> 
+    <option value="98 aˋ 107 mmol/l">98 aˋ 107 mmol/l</option> 
+    <option value="2.00 aˋ 2.39 g/l">2.00 aˋ 2.39 g/l</option> 
+    <option value="86 aˋ 100 mg/l">86 aˋ 100 mg/l</option> 
+    <option value="135 aˋ 155 mmol/l">135 aˋ 155 mmol/l</option> 
+    <option value="16 aˋ 26 mg/l">16 aˋ 26 mg/l</option> 
+    <option value="0.15 aˋ 0.45 g/l">0.15 aˋ 0.45 g/l</option> 
+    <option value="0.06 aˋ 0.18 g/l">0.06 aˋ 0.18 g/l</option> 
+    <option value="6 aˋ 11 mg/l">6 aˋ 11 mg/l</option> 
+    <option value="9 aˋ 13 mg/l">9 aˋ 13 mg/l</option> 
+    <option value="<1.40 g/l">1.40 g/l</option> 
+    <option value="1.61 aˋ 8.41 ng/ml">1.61 aˋ 8.41 ng/ml</option> 
+    <option value="2 aˋ 6 mg/dl">2 aˋ 6 mg/dl</option> 
+    <option value="3.5 aˋ 7 mg/dl">3.5 aˋ 7 mg/dl</option> 
+    <option value="20 aˋ 60 mg/l">20 aˋ 60 mg/l</option> 
+    <option value="35 aˋ 70 mg/l">35 aˋ 70 mg/l</option> 
+    <option value="4 à 6.5%">4 à 6.5%</option> 
+</select>
+                     
+                    </td>
+                <td>
+                    <input type="number" name="price[]" placeholder="السعر" min="0" step="0.01" class="price-field" oninput="updateTotalAmount()">
+                </td>
+                <td>
+                    <input type="text" name="notes[]" placeholder="ملاحظات">
+                </td>
+                <td>
+                    <button type="button" class="btn-delete" onclick="removeTestRow(this)">حذف</button>
+                </td>
+            `;
+            
+            testsTableBody.appendChild(row);
+            
+            // تحميل قائمة الفحوصات في الصف الجديد
+            loadTestsIntoSelect(row.querySelector('select[name="test_name[]"]'));
+            
+            // إذا كانت هناك بيانات للفحص، قم بملء الحقول
+            if (testData) {
+                const selects = row.querySelectorAll('select');
+                const inputs = row.querySelectorAll('input');
+                
+                selects[0].value = testData.testName;
+                selects[1].value = testData.result;
+                inputs[0].value = testData.unit || '';
+                inputs[1].value = testData.reference || '';
+                inputs[2].value = testData.price || '';
+                inputs[3].value = testData.notes || '';
+                
+                // تحديث المبلغ الإجمالي
+                updateTotalAmount();
+            }
+        }
+
+        // حذف صف فحص
+        function removeTestRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+            
+            // إذا لم يتبق أي صفوف، أضف صفًا جديدًا
+            if (testsTableBody.children.length === 0) {
+                addTestRow();
+            }
+            
+            // تحديث المبلغ الإجمالي
+            updateTotalAmount();
+        }
+
+        // تحميل الفحوصات في قائمة الاختيار
+        function loadTestsIntoSelect(selectElement) {
+            const transaction = db.transaction(["tests"], "readonly");
+            const store = transaction.objectStore("tests");
+            const requestAll = store.getAll();
+            
+            requestAll.onsuccess = function() {
+                const tests = requestAll.result;
+                
+                // إضافة خيار فارغ
+                selectElement.innerHTML = '<option value="">-- اختر الفحص --</option>';
+                
+                // إضافة الفحوصات
+                tests.forEach(test => {
+                    const option = document.createElement("option");
+                    option.value = test.name;
+                    option.textContent = test.name;
+                    option.dataset.unit = test.unit || '';
+                    option.dataset.reference = test.reference || '';
+                    option.dataset.price = test.price || 0;
+                    selectElement.appendChild(option);
+                });
+            };
+            
+            requestAll.onerror = function(event) {
+                showAlert("خطأ في تحميل الفحوصات: " + event.target.errorCode, "error");
+            };
+        }
+
+        // تحديث تفاصيل الفحص عند اختيار فحص من القائمة
+        function updateTestDetails(selectElement, rowIndex) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const row = selectElement.closest('tr');
+            
+            if (selectedOption.value) {
+                const transaction = db.transaction(["tests"], "readonly");
+                const store = transaction.objectStore("tests");
+                const index = store.index("name");
+                const request = index.get(selectedOption.value);
+                
+                request.onsuccess = function() {
+                    const test = request.result;
+                    if (test) {
+                        row.querySelector('select[name="unit[]"]').value = test.unit || '';
+                        row.querySelector('select[name="reference[]"]').value = test.reference || '';
+                        row.querySelector('input[name="price[]"]').value = test.price || 0;
+                        
+                        // تحديث المبلغ الإجمالي
+                        updateTotalAmount();
+                    }
+                };
+                
+                request.onerror = function(event) {
+                    showAlert("خطأ في تحميل تفاصيل الفحص: " + event.target.errorCode, "error");
+                };
+            } else {
+                // إذا تم اختيار الخيار الفارغ، امسح الحقول
+                row.querySelector('select[name="unit[]"]').value = '';
+                row.querySelector('select[name="reference[]"]').value = '';
+                row.querySelector('input[name="price[]"]').value = '';
+                
+                // تحديث المبلغ الإجمالي
+                updateTotalAmount();
+            }
+        }
+
+        // تحديث المبلغ الإجمالي
+        function updateTotalAmount() {
+            let total = 0;
+            const priceInputs = testsTableBody.querySelectorAll('input[name="price[]"]');
+            
+            priceInputs.forEach(input => {
+                const price = parseFloat(input.value) || 0;
+                total += price;
+            });
+            
+            totalAmountElement.textContent = total.toFixed(2) + ' ريال';
+            return total;
+        }
+
+        // حفظ نتائج الفحوصات
+        function saveResults() {
+            // جمع بيانات المريض
+            const patientName = document.getElementById("patientName").value.trim();
+            const patientAge = parseInt(document.getElementById("patientAge").value);
+            const patientGender = document.getElementById("patientGender").value;
+            const patientID = document.getElementById("patientID").value.trim();
+            
+            // التحقق من صحة البيانات
+            if (!patientName || isNaN(patientAge) || !patientGender || !patientID) {
+                showAlert("الرجاء ملء جميع بيانات المريض", "error");
+                return;
+            }
+            
+            // جمع نتائج الفحوصات
+            const testRows = testsTableBody.querySelectorAll('tr');
+            const testsResults = [];
+            let totalAmount = 0;
+            
+            for (let i = 0; i < testRows.length; i++) {
+                const row = testRows[i];
+                const testName = row.querySelector('select[name="test_name[]"]').value;
+                const result = row.querySelector('select[name="result[]"]').value;
+                const unit = row.querySelector('select[name="unit[]"]').value;
+                const reference = row.querySelector('select[name="reference[]"]').value;
+                
+                const price = parseFloat(row.querySelector('input[name="price[]"]').value) || 0;
+                const notes = row.querySelector('input[name="notes[]"]').value;
+                
+                if (!testName || !result) {
+                    showAlert("الرجاء ملء اسم الفحص والنتيجة لجميع الفحوصات", "error");
+                    return;
+                }
+                
+                if (isNaN(price) || price < 0) {
+                    showAlert("الرجاء إدخال سعر صحيح لجميع الفحوصات", "error");
+                    return;
+                }
+                
+                totalAmount += price;
+                
+                testsResults.push({
+                    testName,
+                    result,
+                    unit,
+                    reference,
+                    price,
+                    notes
+                });
+            }
+            
+            // إنشاء كائن النتائج
+            const resultData = {
+                patientName,
+                patientAge,
+                patientGender,
+                patientID,
+                testsResults,
+                totalAmount,
+                date: new Date().toISOString()
+            };
+            
+            // إذا كنا في وضع التعديل، أضف معرف السجل
+            if (editingId !== null) {
+                resultData.id = editingId;
+            }
+            
+            // حفظ البيانات في قاعدة البيانات
+            const transaction = db.transaction(["results"], "readwrite");
+            const store = transaction.objectStore("results");
+            
+            let request;
+            if (editingId !== null) {
+                request = store.put(resultData);
+            } else {
+                request = store.add(resultData);
+            }
+            
+            request.onsuccess = function() {
+                showAlert(`تم ${editingId !== null ? 'تعديل' : 'حفظ'} النتائج بنجاح!`, "success");
+                patientForm.reset();
+                testsTableBody.innerHTML = '';
+                addInitialTestRow();
+                loadResults();
+                editingId = null;
+                totalAmountElement.textContent = "0.00 ريال";
+            };
+            
+            request.onerror = function(event) {
+                showAlert("حدث خطأ أثناء حفظ النتائج: " + event.target.errorCode, "error");
+            };
+        }
+
+        // تنسيق التاريخ
+        function formatDate(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+        }
+
+        // تحميل النتائج المحفوظة
+        function loadResults() {
+            resultsTableBody.innerHTML = "";
+            const transaction = db.transaction(["results"], "readonly");
+            const store = transaction.objectStore("results");
+            const requestAll = store.getAll();
+            
+            requestAll.onsuccess = function() {
+                const results = requestAll.result;
+                
+                if (results.length === 0) {
+                    resultsTableBody.innerHTML = "<tr><td colspan='8'>لا توجد نتائج محفوظة.</td></tr>";
+                    return;
+                }
+                
+                results.forEach(result => {
+                    const date = new Date(result.date);
+                    const formattedDate = formatDate(date);
+                    
+                    // حساب المبلغ الإجمالي إذا لم يكن موجوداً (للسجلات القديمة)
+                    let totalAmount = result.totalAmount;
+                    if (totalAmount === undefined) {
+                        totalAmount = 0;
+                        result.testsResults.forEach(test => {
+                            totalAmount += parseFloat(test.price || 0);
+                        });
+                    }
+                    
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${result.patientName}</td>
+                        <td>${result.patientAge}</td>
+                        <td>${result.patientGender}</td>
+                        <td>${result.patientID}</td>
+                        <td>${result.testsResults.length}</td>
+                        
+                        <td class="total-amount">${totalAmount.toFixed(2)}  </td>
+                        <td class="total-amount">   ${formatDate(new Date(result.date))}  </td>
+                        <td>${formattedDate}</td>
+                        <td>
+                            <button class="btn-edit" onclick="editResult(${result.id})">تعديل</button>
+                            <button class="btn-delete" onclick="deleteResult(${result.id})">حذف</button>
+                            <button class="btn-view" onclick="viewResultDetails(${result.id})">عرض</button>
+                            <button class="btn-print" onclick="printResultDetails(${result.id})">طباعة</button>
+                        </td>
+                    `;
+                    
+                    resultsTableBody.appendChild(row);
+                });
+            };
+            
+            requestAll.onerror = function(event) {
+                showAlert("حدث خطأ أثناء تحميل النتائج: " + event.target.errorCode, "error");
+            };
+        }
+
+        // تعديل نتيجة محفوظة
+        function editResult(id) {
+            const transaction = db.transaction(["results"], "readonly");
+            const store = transaction.objectStore("results");
+            const request = store.get(id);
+            
+            request.onsuccess = function() {
+                const result = request.result;
+                
+                // ملء بيانات المريض
+                document.getElementById("patientName").value = result.patientName;
+                document.getElementById("patientAge").value = result.patientAge;
+                document.getElementById("patientGender").value = result.patientGender;
+                document.getElementById("patientID").value = result.patientID;
+                
+                // مسح صفوف الفحوصات الحالية
+                testsTableBody.innerHTML = '';
+                
+                // إضافة صفوف الفحوصات المحفوظة
+                result.testsResults.forEach(test => {
+                    addTestRow(test);
+                });
+                
+                // تعيين معرف التعديل
+                editingId = id;
+                
+                // التمرير إلى النموذج
+                patientForm.scrollIntoView({ behavior: 'smooth' });
+                
+                // تحديث المبلغ الإجمالي
+                updateTotalAmount();
+            };
+            
+            request.onerror = function(event) {
+                showAlert("حدث خطأ أثناء تحميل بيانات النتيجة: " + event.target.errorCode, "error");
+            };
+        }
+
+        // حذف نتيجة محفوظة
+        function deleteResult(id) {
+            if (confirm("هل أنت متأكد من حذف هذه النتيجة؟")) {
+                const transaction = db.transaction(["results"], "readwrite");
+                const store = transaction.objectStore("results");
+                const request = store.delete(id);
+                
+                request.onsuccess = function() {
+                    showAlert("تم حذف النتيجة بنجاح!", "success");
+                    loadResults();
+                };
+                
+                request.onerror = function(event) {
+                    showAlert("حدث خطأ أثناء حذف النتيجة: " + event.target.errorCode, "error");
+                };
+            }
+        }
+
+        // عرض تفاصيل النتيجة
+        function viewResultDetails(id) {
+            const transaction = db.transaction(["results"], "readonly");
+            const store = transaction.objectStore("results");
+            const request = store.get(id);
+            
+            request.onsuccess = function() {
+                const result = request.result;
+                
+                // إنشاء الخلفية المعتمة
+                const backdrop = document.createElement('div');
+                backdrop.className = 'modal-backdrop';
+                document.body.appendChild(backdrop);
+                
+                // إنشاء النافذة المنبثقة
+                const detailsModal = document.createElement('div');
+                detailsModal.className = 'details-modal';
+                
+                let detailsHTML = `
+                    <h3>تفاصيل نتائج المريض: ${result.patientName}</h3>
+                    <p><strong>رقم الملف:</strong> ${result.patientID}</p>
+                    <p><strong>العمر:</strong> ${result.patientAge}</p>
+                    <p><strong>الجنس:</strong> ${result.patientGender}</p>
+                    <p><strong>تاريخ الإدخال:</strong> ${formatDate(new Date(result.date))}</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم الفحص</th>
+                                <th>النتيجة</th>
+                                <th>الوحدة</th>
+                                <th>القيمة المرجعية</th>
+                                <th>السعر</th>
+                                <th>ملاحظات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                result.testsResults.forEach(test => {
+                    detailsHTML += `
+                        <tr>
+                            <td>${test.testName}</td>
+                            <td>${test.result}</td>
+                            <td>${test.unit || ''}</td>
+                            <td>${test.reference || ''}</td>
+                            <td>${test.price ? test.price.toFixed(2) + ' ريال' : ''}</td>
+                            <td>${test.notes || ''}</td>
+                        </tr>
+                    `;
+                });
+                
+                // حساب المبلغ الإجمالي إذا لم يكن موجوداً (للسجلات القديمة)
+                let totalAmount = result.totalAmount;
+                if (totalAmount === undefined) {
+                    totalAmount = 0;
+                    result.testsResults.forEach(test => {
+                        totalAmount += parseFloat(test.price || 0);
+                    });
+                }
+                
+                detailsHTML += `
+                        </tbody>
+                        <tfoot>
+                            <tr class="total-row">
+                                <td colspan="4" style="text-align: left; font-weight: bold;">المبلغ الإجمالي:</td>
+                                <td class="total-amount">${totalAmount.toFixed(2)} ريال</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <button onclick="printResultDetails(${result.id})" class="btn">طباعة</button>
+                        <button onclick="closeModal()" class="btn">إغلاق</button>
+                    </div>
+                `;
+                
+                detailsModal.innerHTML = detailsHTML;
+                document.body.appendChild(detailsModal);
+            };
+            
+            request.onerror = function(event) {
+                showAlert("حدث خطأ أثناء تحميل تفاصيل النتيجة: " + event.target.errorCode, "error");
+            };
+        }
+
+        // إغلاق النافذة المنبثقة
+        function closeModal() {
+            const backdrop = document.querySelector('.modal-backdrop');
+            const modal = document.querySelector('.details-modal');
+            
+            if (backdrop) {
+                document.body.removeChild(backdrop);
+            }
+            
+            if (modal) {
+                document.body.removeChild(modal);
+            }
+        }
+
+        // طباعة تفاصيل النتيجة
+        function printResultDetails(id) {
+            const transaction = db.transaction(["results"], "readonly");
+            const store = transaction.objectStore("results");
+            const request = store.get(id);
+            
+            request.onsuccess = function() {
+                const result = request.result;
+                
+                // إنشاء نافذة طباعة جديدة
+                const printWindow = window.open('', '_blank');
+                
+                // حساب المبلغ الإجمالي إذا لم يكن موجوداً (للسجلات القديمة)
+                let totalAmount = result.totalAmount;
+                if (totalAmount === undefined) {
+                    totalAmount = 0;
+                    result.testsResults.forEach(test => {
+                        totalAmount += parseFloat(test.price || 0);
+                    });
+                }
+                
+                // إنشاء محتوى HTML للطباعة
+                let printContent = `
+                    <!DOCTYPE html>
+                    <html lang="ar" dir="rtl">
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>تقرير نتائج الفحوصات - ${result.patientName}</title>
+                        <style>
+                            body {
+                                font-family: 'Arial', sans-serif;
+                                margin: 20px;
+                                direction: rtl;
+                            }
+                            h1, h2 {
+                                text-align: center;
+                                color: #2563eb;
+                            }
+                            .patient-info {
+                                margin-bottom: 20px;
+                                border: 1px solid #e2e8f0;
+                                padding: 10px;
+                                border-radius: 8px;
+                            }
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin-top: 20px;
+                            }
+                            th, td {
+                                border: 1px solid #e2e8f0;
+                                padding: 8px;
+                                text-align: right;
+                            }
+                            th {
+                                background-color: #f8fafc;
+                                font-weight: bold;
+                            }
+                            .total-row {
+                                font-weight: bold;
+                                background-color: #f0f9ff;
+                            }
+                            .footer {
+                                margin-top: 30px;
+                                text-align: center;
+                                font-size: 0.8em;
+                                color: #64748b;
+                            }
+                            @media print {
+                                .no-print {
+                                    display: none;
+                                }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>تقرير نتائج الفحوصات الطبية</h1>
+                        
+                        <div class="patient-info">
+                            <h2>بيانات المريض</h2>
+                            <p><strong>الاسم:</strong> ${result.patientName}</p>
+                            <p><strong>العمر:</strong> ${result.patientAge}</p>
+                            <p><strong>الجنس:</strong> ${result.patientGender}</p>
+                            <p><strong>رقم الملف:</strong> ${result.patientID}</p>
+                            <p><strong>تاريخ التقرير:</strong> ${formatDate(new Date(result.date))}</p>
+                        </div>
+                        
+                        <h2>نتائج الفحوصات</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>اسم الفحص</th>
+                                    <th>النتيجة</th>
+                                    <th>الوحدة</th>
+                                    <th>القيمة المرجعية</th>
+                                    <th>السعر</th>
+                                    <th>ملاحظات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                result.testsResults.forEach(test => {
+                    printContent += `
+                        <tr>
+                            <td>${test.testName}</td>
+                            <td>${test.result}</td>
+                            <td>${test.unit || ''}</td>
+                            <td>${test.reference || ''}</td>
+                            <td>${test.price ? test.price.toFixed(2) + ' ريال' : ''}</td>
+                            <td>${test.notes || ''}</td>
+                        </tr>
+                    `;
+                });
+                
+                printContent += `
+                            </tbody>
+                            <tfoot>
+                                <tr class="total-row">
+                                    <td colspan="4" style="text-align: left;">المبلغ الإجمالي:</td>
+                                    <td>${totalAmount.toFixed(2)} ريال</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        
+                        <div class="footer">
+                            <p>تم إنشاء هذا التقرير بواسطة نظام إدارة المختبر</p>
+                            <p>تاريخ الطباعة: ${formatDate(new Date())}</p>
+                        </div>
+                        
+                        <div class="no-print" style="text-align: center; margin-top: 20px;">
+                            <button onclick="window.print()">طباعة التقرير</button>
+                            <button onclick="window.close()">إغلاق</button>
+                        </div>
+                    </body>
+                    </html>
+                `;
+                
+                printWindow.document.open();
+                printWindow.document.write(printContent);
+                printWindow.document.close();
+            };
+            
+            request.onerror = function(event) {
+                showAlert("حدث خطأ أثناء تحميل بيانات الطباعة: " + event.target.errorCode, "error");
+            };
+        }
+
+        // فلترة النتائج
+        function filterResults() {
+            const patientFilter = document.getElementById('patientFilter').value.toLowerCase();
+            const dateFilter = document.getElementById('dateFilter').value;
+            
+            const rows = resultsTableBody.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                // تجاهل صف "لا توجد نتائج محفوظة"
+                if (row.cells.length === 1 && row.cells[0].getAttribute('colspan')) {
+                    return;
+                }
+                
+                const patientName = row.cells[0].textContent.toLowerCase();
+                const dateCell = row.cells[6].textContent;
+                
+                let showRow = true;
+                
+                if (patientFilter && !patientName.includes(patientFilter)) {
+                    showRow = false;
+                }
+                
+                if (dateFilter) {
+                    const filterDate = new Date(dateFilter);
+                    const rowDate = parseRowDate(dateCell);
+                    
+                    if (filterDate.toDateString() !== rowDate.toDateString()) {
+                        showRow = false;
+                    }
+                }
+                
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+
+        // تحليل تاريخ الصف
+        function parseRowDate(dateString) {
+            // تحويل تنسيق "DD/MM/YYYY HH:MM" إلى Date object
+            const parts = dateString.split(' ');
+            const dateParts = parts[0].split('/');
+            const timeParts = parts[1].split(':');
+            
+            return new Date(
+                parseInt(dateParts[2]), // سنة
+                parseInt(dateParts[1]) - 1, // شهر (0-11)
+                parseInt(dateParts[0]), // يوم
+                parseInt(timeParts[0]), // ساعة
+                parseInt(timeParts[1]) // دقيقة
+            );
+        }
+
+        // إعادة تعيين فلتر البحث
+        function resetFilters() {
+            document.getElementById('patientFilter').value = '';
+            document.getElementById('dateFilter').value = '';
+            filterResults();
+        }
+
+        // عرض رسالة تنبيه
+        function showAlert(message, type) {
+            alertContainer.textContent = message;
+            alertContainer.className = `alert alert-${type}`;
+            
+            // إظهار الرسالة
+            alertContainer.classList.remove("hidden");
+            
+            // إخفاء الرسالة بعد 3 ثوانٍ
+            setTimeout(() => {
+                alertContainer.classList.add("hidden");
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

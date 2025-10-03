@@ -1,0 +1,451 @@
+ <!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>الفحوصات الطبية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ضع هنا رابط ملف CSS الخاص بك -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    /* الخطوط والإعدادات الأساسية */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+
+:root {
+    /* الألوان الرئيسية */
+    --primary-color: #2563eb;
+    --secondary-color: #64748b;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    
+    /* الخلفيات */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    
+    /* النصوص */
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    
+    /* الحدود */
+    --border-color: #e2e8f0;
+    --border-radius: 8px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 20px;
+    direction: rtl;
+    text-align: right;
+}
+
+/* العناوين */
+h1, h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-top: 30px;
+}
+
+/* نموذج الإدخال */
+form {
+    background-color: var(--bg-primary);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-family: 'Cairo', sans-serif;
+    font-size: 1rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+button {
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#saveBtn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#saveBtn:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+/* جدول الفحوصات */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--bg-primary);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: right;
+}
+
+th {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background-color: var(--bg-secondary);
+}
+
+tr:hover {
+    background-color: rgba(37, 99, 235, 0.05);
+}
+
+td button {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    margin: 0 2px;
+}
+
+td button:first-of-type {
+    background-color: var(--warning-color);
+}
+
+td button:first-of-type:hover {
+    background-color: #d97706;
+}
+
+td button:last-of-type {
+    background-color: var(--danger-color);
+}
+
+td button:last-of-type:hover {
+    background-color: #dc2626;
+}
+
+
+/* رسالة عدم وجود فحوصات */
+tr td[colspan="5"] {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* تصميم متجاوب */
+@media (max-width: 768px) {
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    form {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+}
+
+/* تحسينات إضافية */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.alert {
+    padding: 10px;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
+}
+
+.alert-error {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+}
+
+ 
+
+ 
+/* حاوية الأيقونات الثابتة */
+.fixed-icons {
+    position: fixed;
+    top: 20px; /* المسافة من الأسفل */
+    right: 20px; /* المسافة من اليمين */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* المسافة بين الأيقونات */
+    z-index: 1000; /* للتأكد أنها فوق كل العناصر */
+}
+
+/* شكل الأيقونات */
+.fixed-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: #007BFF; /* أزرق */
+    color: white;
+    font-size: 24px;
+    border-radius: 50%;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+/* تأثير عند المرور */
+.fixed-icons a:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+}
+
+
+</style>
+
+<body>
+    <!-- ضع هذا الكود في كل صفحة تريد ظهور الأيقونات فيها -->
+<div class="fixed-icons">
+    <a href="dashboard.html" title="الرئيسية" class="icon-home">
+        🏠
+    </a>
+    <a href="new_resulat_pathion.html" title="إدارة المرضى" class="icon-patients">
+        🧑‍⚕️
+    </a>
+</div>
+    <h1>إدارة الفحوصات الطبية</h1>
+
+    <!-- نموذج إدخال الفحوصات -->
+    <form id="testForm">
+        <label>اسم الفحص:</label>
+        <input type="text" id="name" required><br>
+
+        <label>السعر:</label>
+        <input type="number" id="price" required min="0"><br>
+
+        <label>الوصف (اختياري):</label>
+        <input type="text" id="desc"><br>
+
+        <button type="submit" id="saveBtn">إضافة / حفظ</button>
+    </form>
+
+    <h2>قائمة الفحوصات</h2>
+    <table border="1" id="testsTable">
+        <thead>
+            <tr>
+                <th>اسم الفحص</th>
+                <th>السعر</th>
+                <th>الوصف</th>
+                <th>تعديل</th>
+                <th>حذف</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- سيتم عرض البيانات هنا -->
+        </tbody>
+    </table>
+
+    <script>
+        let db;
+        const request = indexedDB.open("LabManagementDB", 1);
+
+        request.onupgradeneeded = function(event) {
+            db = event.target.result;
+            if(!db.objectStoreNames.contains("tests")) {
+                const store = db.createObjectStore("tests", { keyPath: "id", autoIncrement: true });
+                store.createIndex("name", "name", { unique: true });
+            }
+        };
+
+        request.onsuccess = function(event) {
+            db = event.target.result;
+            loadTests();
+        };
+
+        request.onerror = function(event) {
+            alert("خطأ في فتح قاعدة البيانات: " + event.target.errorCode);
+        };
+
+        const form = document.getElementById("testForm");
+        const tableBody = document.querySelector("#testsTable tbody");
+        let editingId = null;
+
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+            saveTest();
+        });
+
+        function saveTest() {
+            const name = document.getElementById("name").value.trim();
+            const price = parseFloat(document.getElementById("price").value);
+            const desc = document.getElementById("desc").value.trim();
+
+            if(!name || isNaN(price)) {
+                alert("الرجاء ملء الحقول الإلزامية بشكل صحيح.");
+                return;
+            }
+
+            const transaction = db.transaction(["tests"], "readwrite");
+            const store = transaction.objectStore("tests");
+
+            if(editingId !== null) {
+                // تعديل الفحص
+                const updateData = { id: editingId, name, price, desc };
+                const updateRequest = store.put(updateData);
+                updateRequest.onsuccess = function() {
+                    alert("تم تعديل الفحص بنجاح!");
+                    loadTests();
+                    form.reset();
+                    editingId = null;
+                };
+                updateRequest.onerror = function(e) {
+                    alert("خطأ: ربما الاسم موجود مسبقًا.");
+                };
+            } else {
+                // إضافة فحص جديد
+                const checkRequest = store.index("name").get(name);
+                checkRequest.onsuccess = function() {
+                    if(checkRequest.result) {
+                        alert("اسم الفحص موجود مسبقًا!");
+                    } else {
+                        const addRequest = store.add({ name, price, desc });
+                        addRequest.onsuccess = function() {
+                            alert("تم إضافة الفحص بنجاح!");
+                            loadTests();
+                            form.reset();
+                        };
+                        addRequest.onerror = function(e) {
+                            alert("حدث خطأ أثناء إضافة الفحص.");
+                        };
+                    }
+                };
+            }
+        }
+
+        function loadTests() {
+            tableBody.innerHTML = "";
+            const transaction = db.transaction(["tests"], "readonly");
+            const store = transaction.objectStore("tests");
+            const requestAll = store.getAll();
+
+            requestAll.onsuccess = function() {
+                const data = requestAll.result;
+                if(data.length === 0) {
+                    tableBody.innerHTML = "<tr><td colspan='5'>لا توجد فحوصات محفوظة.</td></tr>";
+                    return;
+                }
+
+                data.forEach(item => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${item.name}</td>
+                        <td>${item.price}</td>
+                        <td>${item.desc || ""}</td>
+                        <td><button onclick="editTest(${item.id})">تعديل</button></td>
+                        <td><button onclick="deleteTest(${item.id})">حذف</button></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            };
+        }
+
+        function editTest(id) {
+            const transaction = db.transaction(["tests"], "readonly");
+            const store = transaction.objectStore("tests");
+            const getRequest = store.get(id);
+
+            getRequest.onsuccess = function() {
+                const data = getRequest.result;
+                document.getElementById("name").value = data.name;
+                document.getElementById("price").value = data.price;
+                document.getElementById("desc").value = data.desc;
+                editingId = data.id;
+            };
+        }
+
+        function deleteTest(id) {
+            if(confirm("هل أنت متأكد من حذف هذا الفحص؟")) {
+                const transaction = db.transaction(["tests"], "readwrite");
+                const store = transaction.objectStore("tests");
+                const deleteRequest = store.delete(id);
+
+                deleteRequest.onsuccess = function() {
+                    alert("تم حذف الفحص بنجاح!");
+                    loadTests();
+                };
+            }
+        }
+    </script>
+</body>
+</html>

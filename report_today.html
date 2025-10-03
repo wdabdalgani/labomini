@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>التقرير المالي اليومي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* الخطوط والإعدادات الأساسية */
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+
+        :root {
+            /* الألوان الرئيسية */
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            
+            /* الخلفيات */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            
+            /* النصوص */
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            
+            /* الحدود */
+            --border-color: #e2e8f0;
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+            direction: rtl;
+            text-align: right;
+        }
+
+        /* تنسيق رأس الصفحة */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background-color: var(--bg-primary);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .logo {
+            width: 100px;
+            height: auto;
+        }
+
+        .header .logo img {
+            width: 100%;
+            height: auto;
+        }
+
+        .header .hospital-info {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .header .hospital-info h1 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            font-size: 2rem;
+        }
+
+        .header .hospital-info p {
+            margin: 2px 0;
+            color: var(--text-secondary);
+        }
+
+        .report-title {
+            text-align: center;
+            margin: 20px 0;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .report-date {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .header-divider {
+            border: 0;
+            height: 3px;
+            background-color: var(--primary-color);
+            margin: 15px 0 25px 0;
+        }
+
+        /* جدول البيانات */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--bg-primary);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--bg-secondary);
+        }
+
+        tr:hover {
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        /* تنسيق صف المجموع */
+        .total-row {
+            background-color: rgba(16, 185, 129, 0.1);
+            font-weight: bold;
+        }
+
+        .total-row td {
+            border-top: 2px solid var(--success-color);
+        }
+
+        /* تنسيق المبلغ الإجمالي */
+        .total-amount {
+            font-weight: bold;
+            color: var(--success-color);
+            font-size: 1.1em;
+        }
+
+        /* تنسيق فلتر البحث */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+            background-color: var(--bg-primary);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-container input, .filter-container button {
+            margin: 0;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .filter-container button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-container button:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        /* تنسيق أزرار الصفحات */
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .pagination-controls button {
+            padding: 8px 16px;
+            border: none;
+            background: linear-gradient(145deg, #4f46e5, #2563eb);
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            transition: all 0.25s ease-in-out;
+        }
+
+        .pagination-controls button:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+            background: linear-gradient(145deg, #6b5dd1, #3b82f6);
+        }
+
+        .pagination-controls button.active {
+            background: linear-gradient(145deg, #2563eb, #1d4ed8);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+            cursor: default;
+            pointer-events: none;
+            transform: scale(1.05);
+        }
+
+        .pagination-controls button:disabled {
+            background: #d1d5db;
+            color: #9ca3af;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* تنسيق زر الطباعة */
+        .print-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .print-btn:hover {
+            background-color: #475569;
+            transform: translateY(-2px);
+        }
+
+        /* تنسيق الرسم البياني */
+        .chart-container {
+            margin: 30px auto;
+            max-width: 800px;
+            height: 300px;
+            background-color: var(--bg-primary);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .header .logo {
+                width: 80px;
+            }
+            
+            .header .hospital-info h1 {
+                font-size: 1.5rem;
+            }
+            
+            .report-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media print {
+            .filter-container, .pagination-controls, .print-btn {
+                display: none;
+            }
+            
+            body {
+                padding: 0;
+                background-color: white;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+            
+            table {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+        <div class="fixed-icons">
+    <a href="dashboard.html" title="الرئيسية" class="icon-home">
+        🏠
+    </a>
+    <a href="new_resulat_pathion.html" title="إدارة المرضى" class="icon-patients">
+        🧑‍⚕️
+    </a>
+</div>
+</div>
+<style>
+/* حاوية الأيقونات الثابتة */
+.fixed-icons {
+    position: fixed;
+    bottom: 30px;   /* المسافة من الأسفل */
+    right: 0px;    /* المسافة من اليمين */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;      /* المسافة بين الأيقونات */
+    z-index: 9999;  /* لضمان ظهورها فوق كل العناصر */
+}
+
+/* تنسيق الأيقونات كأزرار دائرية */
+.fixed-icons a {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #112dff00, #094bf100); /* تدرج أخضر جذاب */
+    color: white;
+    font-size: 28px;
+    border-radius: 50% 0 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+/* تأثير عند المرور */
+.fixed-icons a:hover {
+    transform: scale(1.15) rotate(10deg);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    background: linear-gradient(135deg, #0f08dc, #0b51dc);
+}
+
+/* إضافة تأثير صغير عند الضغط */
+.fixed-icons a:active {
+    transform: scale(0.95) rotate(-5deg);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* اختيار أيقونات مختلفة لكل رابط إذا أحببت */
+.icon-home {
+    background: linear-gradient(135deg, #2196F3, #0b63c9); /* أزرق */
+}
+
+.icon-home:hover {
+    background: linear-gradient(135deg, #0b63c9, #2196F3);
+}
+
+.icon-patients {
+    background: linear-gradient(135deg, #FF5722, #e03d10); /* برتقالي */
+}
+
+.icon-patients:hover {
+    background: linear-gradient(135deg, #e03d10, #FF5722);
+}
+</style>
+    <div class="container">
+        <!-- رأس الصفحة -->
+        <div class="header">
+            <div class="logo">
+                <img src="logo.png" alt="شعار المستشفى">
+            </div>
+            <div class="hospital-info">
+                <h1>اسم المستشفى / المعمل</h1>
+                <p>العنوان: شارع المثال، المدينة، الدولة</p>
+                <p>هاتف: 0123456789 | بريد إلكتروني: info@example.com</p>
+            </div>
+            <div class="logo">
+                <img src="logo.png" alt="شعار المستشفى">
+            </div>
+        </div>
+
+        <h1 class="report-title">التقرير المالي اليومي</h1>
+        <p class="report-date" id="currentDate"></p>
+
+        <hr class="header-divider">
+
+        <!-- فلتر البحث -->
+        <div class="filter-container">
+            <input type="text" id="patientFilter" placeholder="بحث باسم المريض" oninput="filterResults()">
+            <input type="text" id="fileNumberFilter" placeholder="بحث برقم الملف" oninput="filterResults()">
+            <button onclick="resetFilters()" class="btn">إعادة تعيين الفلتر</button>
+        </div>
+
+        <!-- جدول النتائج -->
+        <table id="dailyReportTable">
+            <thead>
+                <tr>
+                    <th>اسم المريض</th>
+                    <th>العمر</th>
+                    <th>الجنس</th>
+                    <th>رقم الملف</th>
+                    <th>عدد الفحوصات</th>
+                    <th>المبلغ الإجمالي</th>
+                    <th>تاريخ ووقت الإدخال</th>
+                </tr>
+            </thead>
+            <tbody id="reportTableBody">
+                <!-- سيتم عرض البيانات هنا -->
+            </tbody>
+            <tfoot>
+                <tr class="total-row">
+                    <td colspan="5" style="text-align: left; font-weight: bold;">إجمالي اليوم:</td>
+                    <td id="dailyTotalAmount" class="total-amount">0.00 ريال</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- أزرار الصفحات -->
+        <div class="pagination-controls" id="paginationControls"></div>
+
+        <!-- زر الطباعة -->
+        <button class="print-btn" onclick="window.print()">طباعة التقرير</button>
+
+        <!-- الرسم البياني (اختياري) -->
+        <div class="chart-container">
+            <canvas id="financialChart"></canvas>
+        </div>
+    </div>
+
+    <!-- مكتبة Chart.js للرسوم البيانية -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // متغيرات عامة
+        let db;
+        let allResults = [];
+        let currentPage = 1;
+        const rowsPerPage = 250;
+        const tableBody = document.getElementById("reportTableBody");
+        const paginationDiv = document.getElementById("paginationControls");
+        const dailyTotalElement = document.getElementById("dailyTotalAmount");
+
+        // عرض تاريخ اليوم
+        const today = new Date();
+        document.getElementById("currentDate").textContent = formatDate(today);
+
+        // فتح قاعدة البيانات
+        const request = indexedDB.open("LabManagementDB", 1);
+
+        request.onupgradeneeded = function(event) {
+            db = event.target.result;
+            
+            // إنشاء مخزن النتائج إذا لم يكن موجوداً
+            if(!db.objectStoreNames.contains("results")) {
+                const resultsStore = db.createObjectStore("results", { keyPath: "id", autoIncrement: true });
+                resultsStore.createIndex("patientID", "patientID", { unique: false });
+                resultsStore.createIndex("date", "date", { unique: false });
+            }
+        };
+
+        request.onsuccess = function(event) {
+            db = event.target.result;
+            // تحميل البيانات عند بدء التطبيق
+            loadTodayResults();
+        };
+
+        request.onerror = function(event) {
+            alert("خطأ في فتح قاعدة البيانات: " + event.target.errorCode);
+        };
+
+        // تحميل نتائج اليوم فقط
+        function loadTodayResults() {
+            const transaction = db.transaction(["results"], "readonly");
+            const store = transaction.objectStore("results");
+            const requestAll = store.getAll();
+
+            requestAll.onsuccess = function() {
+                const allData = requestAll.result;
+                
+                // فلترة النتائج ليوم اليوم فقط
+                const startOfDay = new Date();
+                startOfDay.setHours(0, 0, 0, 0);
+                
+                const endOfDay = new Date();
+                endOfDay.setHours(23, 59, 59, 999);
+                
+                allResults = allData.filter(result => {
+                    const resultDate = new Date(result.date);
+                    return resultDate >= startOfDay && resultDate <= endOfDay;
+                });
+
+                if (allResults.length === 0) {
+                    tableBody.innerHTML = "<tr><td colspan='7'>لا توجد نتائج لهذا اليوم.</td></tr>";
+                    paginationDiv.innerHTML = "";
+                    dailyTotalElement.textContent = "0.00 ريال";
+                    return;
+                }
+
+                // عرض الأحدث أولاً
+                allResults.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                currentPage = 1; // البداية من الصفحة الأولى
+                renderTable();
+                renderPagination();
+                updateDailyTotal();
+                renderChart();
+            };
+
+            requestAll.onerror = function(event) {
+                alert("حدث خطأ أثناء تحميل النتائج: " + event.target.errorCode);
+            };
+        }
+
+        // عرض جدول الصفحة الحالية
+        function renderTable() {
+            tableBody.innerHTML = "";
+
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const slice = allResults.slice(start, end);
+
+            slice.forEach(result => {
+                const date = new Date(result.date);
+                const formattedDate = formatDate(date);
+
+                let totalAmount = result.totalAmount;
+                if (totalAmount === undefined) {
+                    totalAmount = 0;
+                    result.testsResults.forEach(test => {
+                        totalAmount += parseFloat(test.price || 0);
+                    });
+                }
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${result.patientName}</td>
+                    <td>${result.patientAge}</td>
+                    <td>${result.patientGender}</td>
+                    <td>${result.patientID}</td>
+                    <td>${result.testsResults.length}</td>
+                    <td class="total-amount">${totalAmount.toFixed(2)} ريال</td>
+                    <td>${formattedDate}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // رسم أزرار الصفحات
+        function renderPagination() {
+            paginationDiv.innerHTML = "";
+            const totalPages = Math.ceil(allResults.length / rowsPerPage);
+
+            if (totalPages <= 1) {
+                return;
+            }
+
+            // زر السابق
+            const prevBtn = document.createElement("button");
+            prevBtn.textContent = "السابق";
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => { currentPage--; renderTable(); renderPagination(); };
+            paginationDiv.appendChild(prevBtn);
+
+            // أزرار الأرقام
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement("button");
+                btn.textContent = i;
+                if (i === currentPage) {
+                    btn.classList.add("active");
+                }
+                btn.onclick = () => { currentPage = i; renderTable(); renderPagination(); };
+                paginationDiv.appendChild(btn);
+            }
+
+            // زر التالي
+            const nextBtn = document.createElement("button");
+            nextBtn.textContent = "التالي";
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => { currentPage++; renderTable(); renderPagination(); };
+            paginationDiv.appendChild(nextBtn);
+        }
+
+        // تحديث إجمالي اليوم
+        function updateDailyTotal() {
+            const dailyTotal = allResults.reduce((sum, result) => {
+                let total = result.totalAmount;
+                if (total === undefined) {
+                    total = 0;
+                    result.testsResults.forEach(test => {
+                        total += parseFloat(test.price || 0);
+                    });
+                }
+                return sum + total;
+            }, 0);
+            
+            dailyTotalElement.textContent = dailyTotal.toFixed(2) + " ريال";
+        }
+
+        // رسم بياني للماليات
+        function renderChart() {
+            const ctx = document.getElementById('financialChart').getContext('2d');
+            
+            // تجميع البيانات حسب الساعة
+            const hourlyData = {};
+            const patientCounts = {};
+            
+            allResults.forEach(result => {
+                const date = new Date(result.date);
+                const hour = date.getHours();
+                
+                if (!hourlyData[hour]) {
+                    hourlyData[hour] = 0;
+                    patientCounts[hour] = 0;
+                }
+                
+                let total = result.totalAmount;
+                if (total === undefined) {
+                    total = 0;
+                    result.testsResults.forEach(test => {
+                        total += parseFloat(test.price || 0);
+                    });
+                }
+                
+                hourlyData[hour] += total;
+                patientCounts[hour]++;
+            });
+            
+            // تحويل البيانات إلى تنسيق مناسب للرسم البياني
+            const hours = Object.keys(hourlyData).sort((a, b) => a - b);
+            const amounts = hours.map(hour => hourlyData[hour]);
+            const counts = hours.map(hour => patientCounts[hour]);
+            
+            // إنشاء الرسم البياني
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: hours.map(hour => hour + ':00'),
+                    datasets: [
+                        {
+                            label: 'المبلغ الإجمالي (ريال)',
+                            data: amounts,
+                            backgroundColor: 'rgba(37, 99, 235, 0.7)',
+                            borderColor: 'rgba(37, 99, 235, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'عدد المرضى',
+                            data: counts,
+                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            borderWidth: 1,
+                            type: 'line',
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'المبلغ الإجمالي (ريال)'
+                            }
+                        },
+                        y1: {
+                            beginAtZero: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'عدد المرضى'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'تقرير مالي حسب الساعة',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // فلترة النتائج
+        function filterResults() {
+            const patientFilter = document.getElementById('patientFilter').value.toLowerCase();
+            const fileNumberFilter = document.getElementById('fileNumberFilter').value.toLowerCase();
+            
+            const rows = tableBody.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                // تجاهل صف "لا توجد نتائج"
+                if (row.cells.length === 1 && row.cells[0].getAttribute('colspan')) {
+                    return;
+                }
+                
+                const patientName = row.cells[0].textContent.toLowerCase();
+                const fileNumber = row.cells[3].textContent.toLowerCase();
+                
+                let showRow = true;
+                
+                if (patientFilter && !patientName.includes(patientFilter)) {
+                    showRow = false;
+                }
+                
+                if (fileNumberFilter && !fileNumber.includes(fileNumberFilter)) {
+                    showRow = false;
+                }
+                
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+
+        // إعادة تعيين فلتر البحث
+        function resetFilters() {
+            document.getElementById('patientFilter').value = '';
+            document.getElementById('fileNumberFilter').value = '';
+            filterResults();
+        }
+
+        // تنسيق التاريخ
+        function formatDate(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+        }
+    </script>
+</body>
+</html>

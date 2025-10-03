@@ -1,0 +1,547 @@
+/* نظام إدارة المعمل الطبي - تنسيقات المكونات المتقدمة */
+
+/* تنسيقات التقارير */
+.report-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%);
+    color: white;
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    text-align: center;
+}
+
+.report-header h2 {
+    font-size: 1.8rem;
+    margin-bottom: var(--spacing-md);
+    font-weight: 700;
+}
+
+.report-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-top: var(--spacing-md);
+}
+
+.report-summary {
+    padding: var(--spacing-xl);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.summary-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-color);
+}
+
+.summary-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.summary-label {
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.report-table-container {
+    padding: var(--spacing-xl);
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--spacing-lg);
+    background: var(--bg-primary);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.report-table th {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%);
+    color: white;
+    padding: var(--spacing-lg);
+    font-weight: 600;
+    text-align: right;
+    font-size: 0.95rem;
+}
+
+.report-table td {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.report-table tbody tr:hover {
+    background: var(--bg-light);
+}
+
+.report-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.no-data {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.report-section {
+    padding: var(--spacing-xl);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.report-section:last-child {
+    border-bottom: none;
+}
+
+.report-section h3 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-bottom: var(--spacing-lg);
+    font-weight: 700;
+}
+
+.most-used-tests {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.most-used-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-md);
+    background: var(--bg-light);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.most-used-item .rank {
+    background: var(--primary-color);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-left: var(--spacing-md);
+}
+
+.most-used-item .test-name {
+    flex: 1;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.most-used-item .count {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.daily-averages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.avg-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg);
+    background: var(--bg-light);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.avg-item .label {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.avg-item .value {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* تفاصيل المريض */
+.patient-details {
+    max-width: 100%;
+}
+
+.patient-details h3 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-lg);
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.patient-details h4 {
+    color: var(--text-primary);
+    margin: var(--spacing-xl) 0 var(--spacing-lg) 0;
+    font-size: 1.2rem;
+}
+
+.patient-info {
+    background: var(--bg-light);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-lg);
+    border: 1px solid var(--border-color);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.info-grid > div {
+    padding: var(--spacing-sm);
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-primary);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.results-table th {
+    background: var(--primary-color);
+    color: white;
+    padding: var(--spacing-md);
+    font-weight: 600;
+    text-align: right;
+}
+
+.results-table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.results-table tbody tr:hover {
+    background: var(--bg-light);
+}
+
+/* أزرار الإجراءات */
+.action-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.btn-sm {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.85rem;
+    min-width: auto;
+}
+
+.btn-sm span {
+    margin-left: var(--spacing-xs);
+}
+
+/* حقول الإدخال المحسنة */
+.form-group input:invalid {
+    border-color: var(--danger-color);
+}
+
+.form-group input:valid {
+    border-color: var(--success-color);
+}
+
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
+    border-color: var(--danger-color);
+    background-color: rgba(239, 68, 68, 0.05);
+}
+
+.form-group.success input,
+.form-group.success select,
+.form-group.success textarea {
+    border-color: var(--success-color);
+    background-color: rgba(16, 185, 129, 0.05);
+}
+
+/* تحسينات التواصل البصري */
+.alert {
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-lg);
+    border: 1px solid;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+}
+
+.alert-info {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: var(--info-color);
+}
+
+.alert-warning {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: var(--warning-color);
+}
+
+.alert-success {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: var(--success-color);
+}
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: var(--danger-color);
+}
+
+/* تحسينات الجداول */
+.table-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+}
+
+.table-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%);
+    color: white;
+    padding: var(--spacing-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.table-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+/* تحسينات النماذج */
+.form-row {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.form-section {
+    margin-bottom: var(--spacing-2xl);
+    padding: var(--spacing-xl);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    background: var(--bg-primary);
+}
+
+.form-section-title {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--border-color);
+}
+
+/* تحسينات التخطيط */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.page-title {
+    color: var(--primary-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.page-actions {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+/* تحسينات الانيميشن */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+.slide-up {
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* تحسينات التركيز */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* تحسينات الطباعة */
+@media print {
+    .report-header,
+    .report-summary,
+    .report-table-container,
+    .report-section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    
+    .report-table {
+        font-size: 11px;
+    }
+    
+    .report-table th,
+    .report-table td {
+        padding: 4px 6px;
+    }
+    
+    .summary-cards {
+        display: flex;
+        justify-content: space-around;
+    }
+    
+    .summary-card {
+        margin: 0 10px;
+        page-break-inside: avoid;
+    }
+}
+
+/* تحسينات الاستجابة للشاشات الصغيرة */
+@media (max-width: 768px) {
+    .report-info {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        text-align: center;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+    
+    .page-actions {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .summary-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .daily-averages,
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .most-used-item {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
+    }
+    
+    .most-used-item .rank {
+        margin: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .report-table {
+        font-size: 0.8rem;
+    }
+    
+    .report-table th,
+    .report-table td {
+        padding: var(--spacing-sm);
+    }
+    
+    .btn-sm {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 0.8rem;
+    }
+    
+    .summary-number {
+        font-size: 1.5rem;
+    }
+    
+    .report-header h2 {
+        font-size: 1.4rem;
+    }
+}
