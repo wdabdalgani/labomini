@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - نظام إدارة المعمل الطبي</title>
+    <title> Lab Mini V1 </title>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
@@ -437,65 +437,66 @@
 
 <body>
     <div class="login-container">
-        <!-- الجانب الأيسر - معلومات النظام -->
-        <div class="login-info">
-            <div class="lab-icon floating"></div>
-            <h1>نظام إدارة المعمل الطبي</h1>
-            <p>نظام شامل ومتطور لإدارة جميع عمليات المعمل الطبي بكفاءة وأمان</p>
-            
-            <ul class="features-list">
-                <li>إدارة الفحوصات والنتائج</li>
-                <li>التقارير المالية المتقدمة</li>
-                <li>لوحة تحكم شاملة</li>
-                <li>أمان وحماية البيانات</li>
-                <li>واجهة سهلة الاستخدام</li>
-            </ul>
+    <!-- Côté gauche - Informations sur le système -->
+    <div class="login-info">
+        <div class="lab-icon floating"></div>
+        <h1>Système de gestion du laboratoire médical</h1>
+        <p>Système complet et avancé pour gérer efficacement et en toute sécurité toutes les opérations du laboratoire médical</p>
+        
+        <ul class="features-list">
+            <li>Gestion des tests et résultats</li>
+            <li>Rapports financiers avancés</li>
+            <li>Tableau de bord complet</li>
+            <li>Sécurité et protection des données</li>
+            <li>Interface conviviale</li>
+        </ul>
+    </div>
+
+    <!-- Côté droit - Formulaire de connexion -->
+    <div class="login-form-container">
+        <div class="form-header">
+            <h2>Bienvenue à nouveau</h2>
+            <p>Entrez vos informations pour accéder au tableau de bord</p>
         </div>
 
-        <!-- الجانب الأيمن - نموذج تسجيل الدخول -->
-        <div class="login-form-container">
-            <div class="form-header">
-                <h2>مرحباً بعودتك</h2>
-                <p>أدخل بياناتك للوصول إلى لوحة التحكم</p>
+        <!-- Messages d'alerte -->
+        <div id="alert-container"></div>
+
+        <form class="login-form" id="loginForm">
+            <div class="form-group">
+                <label for="username">Nom d'utilisateur</label>
+                <div class="input-container">
+                    <input type="text" id="username" name="username" class="form-input with-icon" 
+                           placeholder="Entrez le nom d'utilisateur" required>
+                    <span class="input-icon">👤</span>
+                </div>
             </div>
 
-            <!-- رسائل التنبيه -->
-            <div id="alert-container"></div>
-
-            <form class="login-form" id="loginForm">
-                <div class="form-group">
-                    <label for="username">اسم المستخدم</label>
-                    <div class="input-container">
-                        <input type="text" id="username" name="username" class="form-input with-icon" 
-                               placeholder="أدخل اسم المستخدم" required>
-                        <span class="input-icon">👤</span>
-                    </div>
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <div class="input-container">
+                    <input type="password" id="password" name="password" class="form-input with-icon" 
+                           placeholder="Entrez le mot de passe" required>
+                    <span class="input-icon">🔒</span>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label for="password">كلمة المرور</label>
-                    <div class="input-container">
-                        <input type="password" id="password" name="password" class="form-input with-icon" 
-                               placeholder="أدخل كلمة المرور" required>
-                        <span class="input-icon">🔒</span>
-                    </div>
+            <div class="form-options">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Se souvenir de moi</label>
                 </div>
+                <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+            </div>
 
-                <div class="form-options">
-                    <div class="remember-me">
-                        <input type="checkbox" id="remember" name="remember">
-                        <label for="remember">تذكرني</label>
-                    </div>
-                    <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
-                </div>
-
-                <button type="submit" class="login-btn" id="loginBtn">
-                    <span id="loginText">تسجيل الدخول</span>
-                    <div class="loading" id="loadingSpinner"></div>
-                </button>
-            </form>
-        </div>
+            <button type="submit" class="login-btn" id="loginBtn">
+                <span id="loginText">Se connecter</span>
+                <div class="loading" id="loadingSpinner"></div>
+            </button>
+        </form>
     </div>
+</div>
+
 
     <script>
         // معلومات تسجيل الدخول الافتراضية
@@ -552,7 +553,9 @@
 
             // التحقق من صحة البيانات المدخلة
             if (!username || !password) {
-                showAlert('يرجى إدخال اسم المستخدم وكلمة المرور', 'error');
+                showAlert("Veuillez entrer le nom d'utilisateur et le mot de passe", "error");
+
+                // showAlert('يرجى إدخال اسم المستخدم وكلمة المرور', 'error');
                 return;
             }
 
@@ -562,8 +565,9 @@
             setTimeout(() => {
                 if (username === DEFAULT_CREDENTIALS.username && password === DEFAULT_CREDENTIALS.password) {
                     // تسجيل دخول ناجح
-                    showAlert('تم تسجيل الدخول بنجاح! سيتم توجيهك إلى لوحة التحكم...', 'success');
-                    
+                    // showAlert('تم تسجيل الدخول بنجاح! سيتم توجيهك إلى لوحة التحكم...', 'success');
+                    showAlert("Connexion réussie ! Vous serez redirigé vers le tableau de bord...", "success");
+
                     // حفظ حالة تسجيل الدخول
                     const loginData = {
                         username: username,
@@ -584,7 +588,7 @@
                     
                 } else {
                     // بيانات خاطئة
-                    showAlert('اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
+                        showAlert('اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
                     setLoading(false);
                 }
             }, 1500);
