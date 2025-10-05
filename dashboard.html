@@ -278,60 +278,66 @@
                 <img src="logo.png" alt="شعار المستشفى">
             </div>
             <div class="hospital-info" id="hospitalInfo">
-                <h1 id="hospitalName">نظام إدارة المعمل الطبي</h1>
-                <p id="hospitalAddress">العنوان: شارع المثال، المدينة، الدولة</p>
-                <p id="hospitalContact">هاتف: 0123456789 | بريد إلكتروني: info@example.com</p>
-                <p id="hospitalLicense">ترخيص رقم: 12345</p>
+                <h1 >   LABO AL- TIBBI    </h1>
+                <p > CABINET MEDICAL GLOBE TERRESTRE   </p>
+                <p > Tel: +235 69 00 08 65 / 69 00 08 64 </p>
+                <p >  RONDPOINT FARCHA – NDJAMENA – TCHAD </p>
             </div>
             <div class="logo">
-                <img src="logo.png" alt="شعار المستشفى">
+                <img src="logo.jpg" alt="شعار المستشفى">
             </div>
         </div>
 
         <!-- عرض الوقت والتاريخ -->
         <div class="datetime-display">
-            <div class="date" id="currentDate">الأحد، 1 يناير 2023</div>
+            <div class="date" id="currentDate">الأح د، 1 ي  ناير 2023</div>
             <div class="time" id="currentTime">12:00:00</div>
         </div>
 
         <!-- روابط الصفحات -->
-        <div class="links-grid">
-            <a href="add_test.html" class="link-card test">
-                <div class="icon">🧪</div>
-                <h3>إضافة فحص جديد</h3>
-                <p>إضافة نتائج فحص جديد للمرضى</p>
-            </a>
-            <a href="new_resulat_pathion.html" class="link-card">
-                <div class="icon">👤</div>
-                <h3> أنشاء نتيجة   </h3>
-                <p>عرض وإدارة نتائج فحوصات  </p>
-            </a>
-            <a href="report_today.html" class="link-card report">
-                <div class="icon">📊</div>
-                <h3>تقرير اليوم</h3>
-                <p>عرض التقرير المالي اليومي</p>
-            </a>
-            <a href="report_month.html" class="link-card report">
-                <div class="icon">📅</div>
-                <h3>تقرير الشهر</h3>
-                <p>عرض التقرير المالي الشهري</p>
-            </a>
-            <a href="report_years.html" class="link-card report">
-                <div class="icon">📈</div>
-                <h3>تقرير السنة</h3>
-                <p>عرض التقرير المالي السنوي</p>
-            </a>
-            <a href="login.html" class="link-card">
-                <div class="icon">🔐</div>
-                <h3>تسجيل الخروج</h3>
-                <p>العودة إلى صفحة تسجيل الدخول</p>
-            </a>
-        </div>
+       <div class="links-grid">
+    <a href="add_test.html" class="link-card test">
+        <div class="icon">🧪</div>
+        <h3>Ajouter un nouveau test</h3>
+        <p>Ajouter les résultats d’un nouveau test pour les patients</p>
+    </a>
+
+    <a href="new_resulat_pathion.html" class="link-card">
+        <div class="icon">👤</div>
+        <h3>Créer un résultat</h3>
+        <p>Afficher et gérer les résultats des analyses</p>
+    </a>
+
+    <a href="report_today.html" class="link-card report">
+        <div class="icon">📊</div>
+        <h3>Rapport du jour</h3>
+        <p>Afficher le rapport financier quotidien</p>
+    </a>
+
+    <a href="report_month.html" class="link-card report">
+        <div class="icon">📅</div>
+        <h3>Rapport du mois</h3>
+        <p>Afficher le rapport financier mensuel</p>
+    </a>
+
+    <a href="report_years.html" class="link-card report">
+        <div class="icon">📈</div>
+        <h3>Rapport de l’année</h3>
+        <p>Afficher le rapport financier annuel</p>
+    </a>
+
+    <a href="login.html" class="link-card">
+        <div class="icon">🔐</div>
+        <h3>Se déconnecter</h3>
+        <p>Retourner à la page de connexion</p>
+    </a>
+</div>
+
  
 
         <!-- تذييل الصفحة -->
-        <div class="footer">
-            <p>جميع الحقوق محفوظة &copy; <span id="currentYear">2023</span> - نظام إدارة المعمل الطبي</p>
+        <div class="footer"> 
+            <p>جميع الحقوق محفوظة &copy; <span id="currentYear">2025</span>  labo mini v1 </p>
         </div>
     </div>
 
@@ -351,9 +357,11 @@
         function updateDateTime() {
             const now = new Date();
             
-            // تنسيق التاريخ
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const dateStr = now.toLocaleDateString('ar-SA', options);
+            // تنسيق التاريخ// تنسيق التاريخ بالإنجليزية
+                // const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const dateStr = now.toLocaleDateString('en-GB');
+                // const dateStr = now.toLocaleDateString('en-US', options);
+
             
             // تنسيق الوقت
             const timeStr = now.toLocaleTimeString('ar-SA');
@@ -375,7 +383,7 @@
                     const data = await hospitalManager.getHospitalDataForReports();
                     
                     // تحديث معلومات المستشفى
-                    document.getElementById('hospitalName').textContent = data.name || 'نظام إدارة المعمل الطبي';
+                    document.getElementById('hospitalName').textContent = data.name || 'نظام ';
                     document.getElementById('hospitalAddress').textContent = 'العنوان: ' + (data.address || 'غير محدد');
                     document.getElementById('hospitalContact').textContent = 'هاتف: ' + (data.phone || 'غير محدد') + 
                         ' | بريد إلكتروني: ' + (data.email || 'غير محدد');

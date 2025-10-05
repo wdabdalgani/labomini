@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="EN">
 <head>
     <meta charset="UTF-8">
-    <title>التقرير المالي اليومي</title>
+   
+    <title>Rapport financier quotidien</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <style>
@@ -34,6 +36,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            direction: ltr;
+
         }
 
         body {
@@ -51,21 +55,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 2px;
             background-color: var(--bg-primary);
-            padding: 15px;
+            padding: 5px;
             border-radius: var(--border-radius);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .header .logo {
             width: 100px;
-            height: auto;
+            height: 120px;
         }
 
         .header .logo img {
             width: 100%;
-            height: auto;
+            height: 100%;
         }
 
         .header .hospital-info {
@@ -116,6 +120,8 @@
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
+            text-align: left;
+            direction: ltr;
         }
 
         th, td {
@@ -164,6 +170,7 @@
             padding: 15px;
             border-radius: var(--border-radius);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            direction: rtl;
         }
 
         .filter-container input, .filter-container button {
@@ -267,10 +274,7 @@
                 overflow-x: auto;
             }
             
-            .header {
-                flex-direction: column;
-                gap: 15px;
-            }
+             
             
             .header .logo {
                 width: 80px;
@@ -380,62 +384,65 @@
                 <img src="logo.png" alt="شعار المستشفى">
             </div>
             <div class="hospital-info">
-                <h1>اسم المستشفى / المعمل</h1>
-                <p>العنوان: شارع المثال، المدينة، الدولة</p>
-                <p>هاتف: 0123456789 | بريد إلكتروني: info@example.com</p>
+                <h1>     LABO AL- TIBBI  </h1>
+                <h3>     CABINET MEDICAL GLOBE TERRESTRE  </h3>
+                <p>  Tel: +235 69 00 08 65 / 69 00 08 64      </p>
+                <p>  RONDPOINT FARCHA – NDJAMENA – TCHAD      </p>
+                <!-- <p>هاتف: 0123456789 | بريد إلكتروني: info@example.com</p> -->
             </div>
             <div class="logo">
-                <img src="logo.png" alt="شعار المستشفى">
+                <img src="logo.jpg" alt="شعار المستشفى">
             </div>
         </div>
 
-        <h1 class="report-title">التقرير المالي اليومي</h1>
+        <!-- <h1 class="report-title">التقرير المالي اليومي</h1> -->
+        <h1 class="report-title">Rapport financier quotidien</h1>
+
         <p class="report-date" id="currentDate"></p>
 
         <hr class="header-divider">
 
-        <!-- فلتر البحث -->
-        <div class="filter-container">
-            <input type="text" id="patientFilter" placeholder="بحث باسم المريض" oninput="filterResults()">
-            <input type="text" id="fileNumberFilter" placeholder="بحث برقم الملف" oninput="filterResults()">
-            <button onclick="resetFilters()" class="btn">إعادة تعيين الفلتر</button>
-        </div>
+ <!-- Filtre de recherche -->
+<div class="filter-container">
+    <input type="text" id="patientFilter" placeholder="Rechercher par nom du patient" oninput="filterResults()">
+    <input type="text" id="fileNumberFilter" placeholder="Rechercher par numéro de dossier" oninput="filterResults()">
+    <button onclick="resetFilters()" class="btn">Réinitialiser le filtre</button>
+</div>
 
-        <!-- جدول النتائج -->
-        <table id="dailyReportTable">
-            <thead>
-                <tr>
-                    <th>اسم المريض</th>
-                    <th>العمر</th>
-                    <th>الجنس</th>
-                    <th>رقم الملف</th>
-                    <th>عدد الفحوصات</th>
-                    <th>المبلغ الإجمالي</th>
-                    <th>تاريخ ووقت الإدخال</th>
-                </tr>
-            </thead>
-            <tbody id="reportTableBody">
-                <!-- سيتم عرض البيانات هنا -->
-            </tbody>
-            <tfoot>
-                <tr class="total-row">
-                    <td colspan="5" style="text-align: left; font-weight: bold;">إجمالي اليوم:</td>
-                    <td id="dailyTotalAmount" class="total-amount">0.00 ريال</td>
-                    <td></td>
-                </tr>
-            </tfoot>
-        </table>
+
+      <!-- Tableau des résultats -->
+<table id="dailyReportTable">
+    <thead>
+        <tr>
+            <th>Nom du patient</th>
+            <th>Âge</th>
+            <th>Sexe</th>
+            <th>Numéro de dossier</th>
+            <th>Nombre de tests</th>
+            <th>Montant total</th>
+            <th>Date et heure d'entrée</th>
+        </tr>
+    </thead>
+    <tbody id="reportTableBody">
+        <!-- Les données seront affichées ici -->
+    </tbody>
+    <tfoot>
+        <tr class="total-row">
+            <td colspan="5" style="text-align: left; font-weight: bold;">Total du jour :</td>
+            <td id="dailyTotalAmount" class="total-amount">0.00 XAF</td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+
 
         <!-- أزرار الصفحات -->
         <div class="pagination-controls" id="paginationControls"></div>
 
         <!-- زر الطباعة -->
-        <button class="print-btn" onclick="window.print()">طباعة التقرير</button>
+ <button class="print-btn" onclick="window.print()">Imprimer le rapport</button>
 
-        <!-- الرسم البياني (اختياري) -->
-        <div class="chart-container">
-            <canvas id="financialChart"></canvas>
-        </div>
+         
     </div>
 
     <!-- مكتبة Chart.js للرسوم البيانية -->
@@ -476,7 +483,8 @@
         };
 
         request.onerror = function(event) {
-            alert("خطأ في فتح قاعدة البيانات: " + event.target.errorCode);
+        alert("Erreur lors de l'ouverture de la base de données : " + event.target.errorCode);
+ 
         };
 
         // تحميل نتائج اليوم فقط
@@ -501,9 +509,10 @@
                 });
 
                 if (allResults.length === 0) {
-                    tableBody.innerHTML = "<tr><td colspan='7'>لا توجد نتائج لهذا اليوم.</td></tr>";
+                    tableBody.innerHTML = "<tr><td colspan='7'>Aucun résultat pour ce jour.</td></tr>";
+                    // tableBody.innerHTML = "<tr><td colspan='7'>لا توجد نتائج لهذا اليوم.</td></tr>";
                     paginationDiv.innerHTML = "";
-                    dailyTotalElement.textContent = "0.00 ريال";
+                    dailyTotalElement.textContent = "0.00 XAF";
                     return;
                 }
 
@@ -518,7 +527,9 @@
             };
 
             requestAll.onerror = function(event) {
-                alert("حدث خطأ أثناء تحميل النتائج: " + event.target.errorCode);
+                // alert("حدث خطأ أثناء تحميل النتائج: " + event.target.errorCode);
+                alert("Une erreur est survenue lors du chargement des résultats : " + event.target.errorCode);
+
             };
         }
 
@@ -549,7 +560,7 @@
                     <td>${result.patientGender}</td>
                     <td>${result.patientID}</td>
                     <td>${result.testsResults.length}</td>
-                    <td class="total-amount">${totalAmount.toFixed(2)} ريال</td>
+                    <td class="total-amount">${totalAmount.toFixed(2)} XAF</td>
                     <td>${formattedDate}</td>
                 `;
                 tableBody.appendChild(row);
@@ -567,7 +578,9 @@
 
             // زر السابق
             const prevBtn = document.createElement("button");
-            prevBtn.textContent = "السابق";
+            // prevBtn.textContent = "السابق";
+            prevBtn.textContent = "Précédent";
+
             prevBtn.disabled = currentPage === 1;
             prevBtn.onclick = () => { currentPage--; renderTable(); renderPagination(); };
             paginationDiv.appendChild(prevBtn);
@@ -585,7 +598,9 @@
 
             // زر التالي
             const nextBtn = document.createElement("button");
-            nextBtn.textContent = "التالي";
+            // nextBtn.textContent = "التالي";
+            nextBtn.textContent = "Suivant";
+
             nextBtn.disabled = currentPage === totalPages;
             nextBtn.onclick = () => { currentPage++; renderTable(); renderPagination(); };
             paginationDiv.appendChild(nextBtn);
@@ -604,104 +619,10 @@
                 return sum + total;
             }, 0);
             
-            dailyTotalElement.textContent = dailyTotal.toFixed(2) + " ريال";
+            dailyTotalElement.textContent = dailyTotal.toFixed(2) + " XAF";
         }
 
-        // رسم بياني للماليات
-        function renderChart() {
-            const ctx = document.getElementById('financialChart').getContext('2d');
-            
-            // تجميع البيانات حسب الساعة
-            const hourlyData = {};
-            const patientCounts = {};
-            
-            allResults.forEach(result => {
-                const date = new Date(result.date);
-                const hour = date.getHours();
-                
-                if (!hourlyData[hour]) {
-                    hourlyData[hour] = 0;
-                    patientCounts[hour] = 0;
-                }
-                
-                let total = result.totalAmount;
-                if (total === undefined) {
-                    total = 0;
-                    result.testsResults.forEach(test => {
-                        total += parseFloat(test.price || 0);
-                    });
-                }
-                
-                hourlyData[hour] += total;
-                patientCounts[hour]++;
-            });
-            
-            // تحويل البيانات إلى تنسيق مناسب للرسم البياني
-            const hours = Object.keys(hourlyData).sort((a, b) => a - b);
-            const amounts = hours.map(hour => hourlyData[hour]);
-            const counts = hours.map(hour => patientCounts[hour]);
-            
-            // إنشاء الرسم البياني
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: hours.map(hour => hour + ':00'),
-                    datasets: [
-                        {
-                            label: 'المبلغ الإجمالي (ريال)',
-                            data: amounts,
-                            backgroundColor: 'rgba(37, 99, 235, 0.7)',
-                            borderColor: 'rgba(37, 99, 235, 1)',
-                            borderWidth: 1,
-                            yAxisID: 'y'
-                        },
-                        {
-                            label: 'عدد المرضى',
-                            data: counts,
-                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
-                            borderColor: 'rgba(16, 185, 129, 1)',
-                            borderWidth: 1,
-                            type: 'line',
-                            yAxisID: 'y1'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            position: 'left',
-                            title: {
-                                display: true,
-                                text: 'المبلغ الإجمالي (ريال)'
-                            }
-                        },
-                        y1: {
-                            beginAtZero: true,
-                            position: 'right',
-                            grid: {
-                                drawOnChartArea: false
-                            },
-                            title: {
-                                display: true,
-                                text: 'عدد المرضى'
-                            }
-                        }
-                    },
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'تقرير مالي حسب الساعة',
-                            font: {
-                                size: 16
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
+        
         // فلترة النتائج
         function filterResults() {
             const patientFilter = document.getElementById('patientFilter').value.toLowerCase();

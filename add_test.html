@@ -1,5 +1,5 @@
  <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>الفحوصات الطبية</title>
@@ -36,6 +36,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    direction: ltr;
+    text-align: left
 }
 
 body {
@@ -179,6 +181,7 @@ td button:last-of-type {
 
 td button:last-of-type:hover {
     background-color: #dc2626;
+    text-align: center;
 }
 
 
@@ -284,33 +287,37 @@ tr td[colspan="5"] {
         🧑‍⚕️
     </a>
 </div>
-    <h1>إدارة الفحوصات الطبية</h1>
+    <h1>Gestion des examens médicaux</h1>
 
     <!-- نموذج إدخال الفحوصات -->
-    <form id="testForm">
-        <label>اسم الفحص:</label>
-        <input type="text" id="name" required><br>
+ 
+<form id="testForm">
+    <label>Nom du test :</label>
+    <input type="text" id="name" required><br>
 
-        <label>السعر:</label>
-        <input type="number" id="price" required min="0"><br>
+    <label>Prix :</label>
+    <input type="number" id="price" required min="0"><br>
 
-        <label>الوصف (اختياري):</label>
-        <input type="text" id="desc"><br>
+    <label>Description (optionnelle) :</label>
+    <input type="text" id="desc"><br>
 
-        <button type="submit" id="saveBtn">إضافة / حفظ</button>
-    </form>
+    <button type="submit" id="saveBtn">Ajouter / Enregistrer</button>
+    
+</form>
 
-    <h2>قائمة الفحوصات</h2>
+ <h2>Liste des tests</h2>
+
     <table border="1" id="testsTable">
-        <thead>
-            <tr>
-                <th>اسم الفحص</th>
-                <th>السعر</th>
-                <th>الوصف</th>
-                <th>تعديل</th>
-                <th>حذف</th>
-            </tr>
-        </thead>
+     <thead>
+    <tr>
+        <th>Nom du test</th>
+        <th>Prix</th>
+        <th>Description</th>
+        <th>Modifier</th>
+        <th>Supprimer</th>
+    </tr>
+</thead>
+
         <tbody>
             <!-- سيتم عرض البيانات هنا -->
         </tbody>
@@ -334,7 +341,7 @@ tr td[colspan="5"] {
         };
 
         request.onerror = function(event) {
-            alert("خطأ في فتح قاعدة البيانات: " + event.target.errorCode);
+alert("Erreur lors de l’ouverture de la base de données : " + event.target.errorCode);
         };
 
         const form = document.getElementById("testForm");
@@ -352,7 +359,8 @@ tr td[colspan="5"] {
             const desc = document.getElementById("desc").value.trim();
 
             if(!name || isNaN(price)) {
-                alert("الرجاء ملء الحقول الإلزامية بشكل صحيح.");
+             alert("Veuillez remplir correctement les champs obligatoires.");
+
                 return;
             }
 
@@ -364,29 +372,38 @@ tr td[colspan="5"] {
                 const updateData = { id: editingId, name, price, desc };
                 const updateRequest = store.put(updateData);
                 updateRequest.onsuccess = function() {
-                    alert("تم تعديل الفحص بنجاح!");
+                 
+                    alert("Le test a été modifié avec succès !");
+
                     loadTests();
                     form.reset();
                     editingId = null;
                 };
                 updateRequest.onerror = function(e) {
-                    alert("خطأ: ربما الاسم موجود مسبقًا.");
+                     alert("Erreur : le nom existe peut-être déjà.");
+
                 };
             } else {
                 // إضافة فحص جديد
                 const checkRequest = store.index("name").get(name);
                 checkRequest.onsuccess = function() {
                     if(checkRequest.result) {
-                        alert("اسم الفحص موجود مسبقًا!");
+                       
+                        alert("Le nom du test existe déjà !");
+
                     } else {
                         const addRequest = store.add({ name, price, desc });
                         addRequest.onsuccess = function() {
-                            alert("تم إضافة الفحص بنجاح!");
+                    
+                            alert("Le test a été ajouté avec succès !");
+
                             loadTests();
                             form.reset();
                         };
                         addRequest.onerror = function(e) {
-                            alert("حدث خطأ أثناء إضافة الفحص.");
+                          
+                            alert("Une erreur est survenue lors de l’ajout du test.");
+
                         };
                     }
                 };
@@ -402,7 +419,9 @@ tr td[colspan="5"] {
             requestAll.onsuccess = function() {
                 const data = requestAll.result;
                 if(data.length === 0) {
-                    tableBody.innerHTML = "<tr><td colspan='5'>لا توجد فحوصات محفوظة.</td></tr>";
+          
+                    tableBody.innerHTML = "<tr><td colspan='5'>Aucun test enregistré.</td></tr>";
+
                     return;
                 }
 
@@ -412,8 +431,12 @@ tr td[colspan="5"] {
                         <td>${item.name}</td>
                         <td>${item.price}</td>
                         <td>${item.desc || ""}</td>
-                        <td><button onclick="editTest(${item.id})">تعديل</button></td>
-                        <td><button onclick="deleteTest(${item.id})">حذف</button></td>
+         
+                        <td><button onclick="editTest(${item.id})">Modifier</button></td>
+<td><button onclick="deleteTest(${item.id})">Supprimer</button></td>
+
+ 
+
                     `;
                     tableBody.appendChild(row);
                 });
@@ -433,19 +456,19 @@ tr td[colspan="5"] {
                 editingId = data.id;
             };
         }
+function deleteTest(id) {
+    if(confirm("Êtes-vous sûr de vouloir supprimer ce test ?")) {
+        const transaction = db.transaction(["tests"], "readwrite");
+        const store = transaction.objectStore("tests");
+        const deleteRequest = store.delete(id);
 
-        function deleteTest(id) {
-            if(confirm("هل أنت متأكد من حذف هذا الفحص؟")) {
-                const transaction = db.transaction(["tests"], "readwrite");
-                const store = transaction.objectStore("tests");
-                const deleteRequest = store.delete(id);
+        deleteRequest.onsuccess = function() {
+            alert("Le test a été supprimé avec succès !");
+            loadTests();
+        };
+    }
+}
 
-                deleteRequest.onsuccess = function() {
-                    alert("تم حذف الفحص بنجاح!");
-                    loadTests();
-                };
-            }
-        }
     </script>
 </body>
 </html>

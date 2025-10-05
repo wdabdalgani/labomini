@@ -43,7 +43,7 @@
         color: var(--text-primary);
         line-height: 1.6;
         padding: 20px;
-        direction: rtl;
+        direction: ltr;
         text-align: right;
     }
 
@@ -76,6 +76,7 @@
         max-width: 800px;
         margin-left: auto;
         margin-right: auto;
+        text-align: left;
     }
 
     .form-row {
@@ -324,6 +325,8 @@
         z-index: 1000;
         max-width: 90%;
         max-height: 90%;
+        direction: ltr;
+        text-align: left;
         overflow-y: auto;
     }
 
@@ -434,88 +437,93 @@
 </style>
 
     <div class="container">
-        <h1>إدارة نتائج الفحوصات الطبية</h1>
+        
+        <h1>Gestion des résultats des examens médicaux</h1>
+
 
         <div id="alertContainer" class="hidden"></div>
 
         <!-- نموذج بيانات المريض -->
-        <form id="patientForm">
-            <h2>بيانات المريض</h2>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="patientName">اسم المريض:</label>
-                    <input type="text" id="patientName" required>
-                </div>
-                <div class="form-group">
-                    <label for="patientAge">العمر:</label>
-                    <input type="number" id="patientAge" min="0" required>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="patientGender">الجنس:</label>
-                    <select id="patientGender" required>
-                        <option value="">-- اختر --</option>
-                        <option value="ذكر">ذكر</option>
-                        <option value="أنثى">أنثى</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="patientID">رقم الملف:</label>
-                    <input type="text" id="patientID" required>
-                </div>
-            </div>
-
-            <h2>نتائج الفحوصات</h2>
-            <table id="testsTable">
-                <thead>
-                    <tr>
-                        <th>اسم الفحص</th>
-                        <th>النتيجة</th>
-                        <th>الوحدة</th>
-                        <th>القيمة المرجعية</th>
-                        <th>السعر</th>
-                        <th>ملاحظات</th>
-                        <th>إجراء</th>
-                    </tr>
-                </thead>
-                <tbody >
-                    <!-- سيتم إضافة الصفوف ديناميكياً -->
-                </tbody>
-                <tfoot>
-                    <tr class="total-row">
-                        <td colspan="4" style="text-align: left; font-weight: bold;">المبلغ الإجمالي:</td>
-                        <td id="totalAmount" class="total-amount">0.00 ريال</td>
-                        <td colspan="2"></td>
-                    </tr>
-                </tfoot>
-                </table>
-
-            <button type="button" id="addTestBtn" class="btn btn-add">+ إضافة فحص</button>
-            <button type="submit" id="saveBtn" class="btn btn-success">حفظ النتائج</button>
-        </form>
-
-        <h2>سجل نتائج الفحوصات</h2>
-        
-        <!-- فلتر البحث -->
-        <div class="filter-container">
-            <input type="text" id="patientFilter" placeholder="بحث باسم المريض" oninput="filterResults()">
-            <input type="date" id="dateFilter" onchange="filterResults()">
-            <button onclick="resetFilters()" class="btn">إعادة تعيين الفلتر</button>
+       <form id="patientForm">
+    <h2>Données du patient</h2>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="patientName">Nom du patient :</label>
+            <input type="text" id="patientName" required>
         </div>
+        <div class="form-group">
+            <label for="patientAge">Âge :</label>
+            <input type="number" id="patientAge" min="0" required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="patientGender">Sexe :</label>
+            <select id="patientGender" required>
+                <option value="">-- Choisir --</option>
+                <option value="Homme">Homme</option>
+                <option value="Femme">Femme</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="patientID">Numéro de dossier :</label>
+            <input type="text" id="patientID" required>
+        </div>
+    </div>
+
+    <h2>Résultats des tests</h2>
+    <table id="testsTable">
+        <thead>
+            <tr>
+                <th>Nom du test</th>
+                <th>Résultat</th>
+                <th>Unité</th>
+                <th>Valeur de référence</th>
+                <th>Prix</th>
+                <th>Remarques</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Les lignes seront ajoutées dynamiquement -->
+        </tbody>
+        <tfoot>
+            <tr class="total-row">
+                <td colspan="4" style="text-align: left; font-weight: bold;">Montant total :</td>
+                <td id="totalAmount" class="total-amount">0,00 Riyal</td>
+                <td colspan="2"></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <button type="button" id="addTestBtn" class="btn btn-add">+ Ajouter un test</button>
+    <button type="submit" id="saveBtn" class="btn btn-success">Enregistrer les résultats</button>
+</form>
+
+
+<h2>Historique des résultats des tests</h2>
+
+<!-- Filtre de recherche -->
+<div class="filter-container">
+    <input type="text" id="patientFilter" placeholder="Rechercher par nom du patient" oninput="filterResults()">
+    <input type="date" id="dateFilter" onchange="filterResults()">
+    <button onclick="resetFilters()" class="btn">Réinitialiser le filtre</button>
+</div>
+
         
         <table id="resultsTable">
             <thead>
-                <tr>
-                    <th>اسم المريض</th>
-                    <th>العمر</th>
-                    <th>الجنس</th>
-                    <th>رقم الملف</th>
-                    <th>عدد الفحوصات</th>
-                    <th>المبلغ الإجمالي</th>
-                    <th>تاريخ الإدخال</th>
-                    <th>إجراءات</th>
-                </tr>
+              <tr>
+    <th>Nom du patient</th>
+    <th>Âge</th>
+    <th>Sexe</th>
+    <th>Numéro de dossier</th>
+    <th>Nombre de tests</th>
+    <th>Montant total</th>
+    <th>Date d’entrée</th>
+    <th>Actions</th>
+</tr>
+
             </thead>
             <tbody id="resultsTableBody">
                 <!-- سيتم عرض البيانات هنا -->
@@ -620,12 +628,13 @@
         });
 
         // حفظ النتائج عند تقديم النموذج
-        patientForm.addEventListener("submit", function(e) {
-            e.preventDefault();
-            if (confirm("هل أنت متأكد من حفظ النتائج؟")) {
-                saveResults();
-            }
-        });
+      patientForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    if (confirm("Êtes-vous sûr de vouloir enregistrer les résultats ?")) {
+        saveResults();
+    }
+});
+
 
         // إضافة صف فحص أولي
         function addInitialTestRow() {
@@ -642,14 +651,14 @@
             row.innerHTML = `
                 <td>
                     <select name="test_name[]" required onchange="updateTestDetails(this, ${rowIndex})">
-                        <option value="">-- اختر الفحص --</option>
+<option value="">-- Choisir le test --</option>
                         <!-- سيتم تحميل الفحوصات ديناميكياً -->
                     </select>
                 </td>
                 <td>
                     <select name="result[]" required>
 
-                        <option value="">-- اختر --</option>
+                   <option value="">-- Choisir --</option>
                         
                           <option value="00 g/l">00 g/l</option> 
     <option value="01 g/l">01 g/l</option> 
@@ -832,13 +841,15 @@
                      
                     </td>
                 <td>
-                    <input type="number" name="price[]" placeholder="السعر" min="0" step="0.01" class="price-field" oninput="updateTotalAmount()">
+<input type="number" name="price[]" placeholder="Prix" min="0" step="0.01" class="price-field" oninput="updateTotalAmount()">
                 </td>
                 <td>
-                    <input type="text" name="notes[]" placeholder="ملاحظات">
+       <input type="text" name="notes[]" placeholder="Remarques">
+
                 </td>
                 <td>
-                    <button type="button" class="btn-delete" onclick="removeTestRow(this)">حذف</button>
+<button type="button" class="btn-delete" onclick="removeTestRow(this)">Supprimer</button>
+
                 </td>
             `;
             
@@ -888,7 +899,8 @@
                 const tests = requestAll.result;
                 
                 // إضافة خيار فارغ
-                selectElement.innerHTML = '<option value="">-- اختر الفحص --</option>';
+          selectElement.innerHTML = '<option value="">-- Choisir le test --</option>';
+
                 
                 // إضافة الفحوصات
                 tests.forEach(test => {
@@ -903,7 +915,9 @@
             };
             
             requestAll.onerror = function(event) {
-                showAlert("خطأ في تحميل الفحوصات: " + event.target.errorCode, "error");
+  
+                showAlert("Erreur lors du chargement des tests : " + event.target.errorCode, "error");
+
             };
         }
 
@@ -931,7 +945,9 @@
                 };
                 
                 request.onerror = function(event) {
-                    showAlert("خطأ في تحميل تفاصيل الفحص: " + event.target.errorCode, "error");
+              
+                    showAlert("Erreur lors du chargement des détails du test : " + event.target.errorCode, "error");
+
                 };
             } else {
                 // إذا تم اختيار الخيار الفارغ، امسح الحقول
@@ -954,7 +970,7 @@
                 total += price;
             });
             
-            totalAmountElement.textContent = total.toFixed(2) + ' ريال';
+            totalAmountElement.textContent = total.toFixed(2) + ' XAF';
             return total;
         }
 
@@ -968,7 +984,9 @@
             
             // التحقق من صحة البيانات
             if (!patientName || isNaN(patientAge) || !patientGender || !patientID) {
-                showAlert("الرجاء ملء جميع بيانات المريض", "error");
+                 
+                showAlert("Veuillez remplir toutes les informations du patient", "error");
+
                 return;
             }
             
@@ -988,12 +1006,16 @@
                 const notes = row.querySelector('input[name="notes[]"]').value;
                 
                 if (!testName || !result) {
-                    showAlert("الرجاء ملء اسم الفحص والنتيجة لجميع الفحوصات", "error");
+ 
+                    showAlert("Veuillez remplir le nom du test et le résultat pour tous les tests", "error");
+
                     return;
                 }
                 
                 if (isNaN(price) || price < 0) {
-                    showAlert("الرجاء إدخال سعر صحيح لجميع الفحوصات", "error");
+                  
+                    showAlert("Veuillez saisir un prix valide pour tous les tests", "error");
+
                     return;
                 }
                 
@@ -1037,17 +1059,22 @@
             }
             
             request.onsuccess = function() {
-                showAlert(`تم ${editingId !== null ? 'تعديل' : 'حفظ'} النتائج بنجاح!`, "success");
+                 showAlert(`Les résultats ont été ${editingId !== null ? 'modifiés' : 'enregistrés'} avec succès !`, "success");
+
                 patientForm.reset();
                 testsTableBody.innerHTML = '';
                 addInitialTestRow();
                 loadResults();
                 editingId = null;
-                totalAmountElement.textContent = "0.00 ريال";
+                
+                totalAmountElement.textContent = "0.00 XAF";
+
             };
             
             request.onerror = function(event) {
-                showAlert("حدث خطأ أثناء حفظ النتائج: " + event.target.errorCode, "error");
+          
+                showAlert("Une erreur est survenue lors de l’enregistrement des résultats : " + event.target.errorCode, "error");
+
             };
         }
 
@@ -1078,7 +1105,9 @@ function loadResults() {
         allResults = requestAll.result;
 
         if (allResults.length === 0) {
-            tableBody.innerHTML = "<tr><td colspan='8'>لا توجد نتائج محفوظة.</td></tr>";
+             
+            tableBody.innerHTML = "<tr><td colspan='8'>Aucun résultat enregistré.</td></tr>";
+
             paginationDiv.innerHTML = "";
             return;
         }
@@ -1092,7 +1121,9 @@ function loadResults() {
     };
 
     requestAll.onerror = function(event) {
-        showAlert("حدث خطأ أثناء تحميل النتائج: " + event.target.errorCode, "error");
+       
+        showAlert("Une erreur est survenue lors du chargement des résultats : " + event.target.errorCode, "error");
+
     };
 }
 
@@ -1126,10 +1157,13 @@ function renderTable() {
             <td class="total-amount">${totalAmount.toFixed(2)}</td>
             <td>${formattedDate}</td>
             <td>
-                <button class="btn-edit"  onclick="editResult(${result.id})">تعديل</button>
-                <button class="btn-delete" onclick="deleteResult(${result.id})">حذف</button>
-                <button class="btn-view" onclick="viewResultDetails(${result.id})">عرض</button>
-                <button class="btn-print" onclick="printResultDetails(${result.id})">طباعة</button>
+                
+         <button class="btn-edit" onclick="editResult(${result.id})">Modifier</button>
+<button class="btn-delete" onclick="deleteResult(${result.id})">Supprimer</button>
+<button class="btn-view" onclick="viewResultDetails(${result.id})">Afficher</button>
+<button class="btn-print" onclick="printResultDetails(${result.id})">Imprimer</button>
+
+
             </td>
         `;
         tableBody.appendChild(row);
@@ -1144,7 +1178,7 @@ function renderTable() {
         }
         return sum + total;
     }, 0);
-    document.getElementById("totalAmount").textContent = pageTotal.toFixed(2) + " ريال";
+    document.getElementById("totalAmount").textContent = pageTotal.toFixed(2) + " XAF";
 }
 
 // رسم أزرار الصفحات
@@ -1154,7 +1188,9 @@ function renderPagination() {
 
     // زر السابق
     const prevBtn = document.createElement("button");
-    prevBtn.textContent = "السابق";
+  
+    prevBtn.textContent = "Précédent";
+
     prevBtn.disabled = currentPage === 1;
     prevBtn.onclick = () => { currentPage--; renderTable(); renderPagination(); };
     paginationDiv.appendChild(prevBtn);
@@ -1170,7 +1206,7 @@ function renderPagination() {
 
     // زر التالي
     const nextBtn = document.createElement("button");
-    nextBtn.textContent = "التالي";
+    nextBtn.textContent = "Suivant";
     nextBtn.disabled = currentPage === totalPages;
     nextBtn.onclick = () => { currentPage++; renderTable(); renderPagination(); };
     paginationDiv.appendChild(nextBtn);
@@ -1217,27 +1253,29 @@ loadResults();
             };
             
             request.onerror = function(event) {
-                showAlert("حدث خطأ أثناء تحميل بيانات النتيجة: " + event.target.errorCode, "error");
+                // showAlert("حدث خطأ أثناء تحميل بيانات النتيجة: " + event.target.errorCode, "error");
+                showAlert("Une erreur est survenue lors du chargement des données du résultat : " + event.target.errorCode, "error");
+
             };
         }
 
         // حذف نتيجة محفوظة
-        function deleteResult(id) {
-            if (confirm("هل أنت متأكد من حذف هذه النتيجة؟")) {
-                const transaction = db.transaction(["results"], "readwrite");
-                const store = transaction.objectStore("results");
-                const request = store.delete(id);
-                
-                request.onsuccess = function() {
-                    showAlert("تم حذف النتيجة بنجاح!", "success");
-                    loadResults();
-                };
-                
-                request.onerror = function(event) {
-                    showAlert("حدث خطأ أثناء حذف النتيجة: " + event.target.errorCode, "error");
-                };
-            }
-        }
+       function deleteResult(id) {
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce résultat ?")) {
+        const transaction = db.transaction(["results"], "readwrite");
+        const store = transaction.objectStore("results");
+        const request = store.delete(id);
+        
+        request.onsuccess = function() {
+            showAlert("Le résultat a été supprimé avec succès !", "success");
+            loadResults();
+        };
+        
+        request.onerror = function(event) {
+            showAlert("Une erreur est survenue lors de la suppression du résultat : " + event.target.errorCode, "error");
+        };
+    }
+}
 
         // عرض تفاصيل النتيجة
         function viewResultDetails(id) {
@@ -1258,24 +1296,26 @@ loadResults();
                 detailsModal.className = 'details-modal';
                 
                 let detailsHTML = `
-                    <h3>تفاصيل نتائج المريض: ${result.patientName}</h3>
-                    <p><strong>رقم الملف:</strong> ${result.patientID}</p>
-                    <p><strong>العمر:</strong> ${result.patientAge}</p>
-                    <p><strong>الجنس:</strong> ${result.patientGender}</p>
-                    <p><strong>تاريخ الإدخال:</strong> ${formatDate(new Date(result.date))}</p>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>اسم الفحص</th>
-                                <th>النتيجة</th>
-                                <th>الوحدة</th>
-                                <th>القيمة المرجعية</th>
-                                <th>السعر</th>
-                                <th>ملاحظات</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
+    
+    <h3>Détails des résultats du patient: ${result.patientName}</h3>
+    <p><strong>Numéro de dossier:</strong> ${result.patientID}</p>
+    <p><strong>Âge:</strong> ${result.patientAge}</p>
+    <p><strong>Sexe:</strong> ${result.patientGender}</p>
+    <p><strong>Date d’entrée:</strong> ${formatDate(new Date(result.date))}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom du test</th>
+                <th>Résultat</th>
+                <th>Unité</th>
+                <th>Valeur de référence</th>
+                <th>Prix</th>
+                <th>Remarques</th>
+            </tr>
+        </thead>
+        <tbody>
+`;
+
                 
                 result.testsResults.forEach(test => {
                     detailsHTML += `
@@ -1284,7 +1324,7 @@ loadResults();
                             <td>${test.result}</td>
                             <td>${test.unit || ''}</td>
                             <td>${test.reference || ''}</td>
-                            <td>${test.price ? test.price.toFixed(2) + ' ريال' : ''}</td>
+                            <td>${test.price ? test.price.toFixed(2) + ' XAF' : ''}</td>
                             <td>${test.notes || ''}</td>
                         </tr>
                     `;
@@ -1303,15 +1343,17 @@ loadResults();
                         </tbody>
                         <tfoot>
                             <tr class="total-row">
-                                <td colspan="4" style="text-align: left; font-weight: bold;">المبلغ الإجمالي:</td>
-                                <td class="total-amount">${totalAmount.toFixed(2)} ريال</td>
+                                <td colspan="4" style="text-align: left; font-weight: bold;">Montant total :</td>
+
+                                 <td class="total-amount">${totalAmount.toFixed(2)} XAF</td>
                                 <td></td>
                             </tr>
                         </tfoot>
                     </table>
                     <div style="text-align: center; margin-top: 15px;">
-                        <button onclick="printResultDetails(${result.id})" class="btn">طباعة</button>
-                        <button onclick="closeModal()" class="btn">إغلاق</button>
+                  <button onclick="printResultDetails(${result.id})" class="btn">Imprimer</button>
+<button onclick="closeModal()" class="btn">Fermer</button>
+
                     </div>
                 `;
                 
@@ -1320,7 +1362,9 @@ loadResults();
             };
             
             request.onerror = function(event) {
-                showAlert("حدث خطأ أثناء تحميل تفاصيل النتيجة: " + event.target.errorCode, "error");
+              
+                showAlert("Une erreur est survenue lors du chargement des détails du résultat : " + event.target.errorCode, "error");
+
             };
         }
 
@@ -1362,17 +1406,24 @@ loadResults();
                 // إنشاء محتوى HTML للطباعة
                 let printContent = `
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <title>تقرير نتائج الفحوصات - ${result.patientName}</title>
+     
+    <title>Rapport des résultats des tests - ${result.patientName}</title>
+
     <style>
         @page { size: A4; margin: 20mm; }
+        *{
+           direction: ltr;
+              text-align: left;
+        }
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            direction: rtl;
+             direction: ltr;
+              text-align: left;
             background-color: #fff;
         }
 
@@ -1382,6 +1433,8 @@ loadResults();
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            text-align: center;
+                 direction: ltr;
         }
 
         .header .logo {
@@ -1396,8 +1449,15 @@ loadResults();
         .header .institution-info {
             text-align: center;
             flex-grow: 1;
+            display: flex;
+        flex-direction: column;
+         justify-content: center;
+        text-align: center;
+        align-items: center;
+
         }
 
+        
         .header .institution-info h1 {
             margin: 0;
             color: #2563eb;
@@ -1466,18 +1526,21 @@ loadResults();
 <body>
 
     <!-- رأس التقرير مع شعارين -->
+
     <div class="header">
         <div class="logo">
             <img src="logo.png" alt="شعار المؤسسة اليسار">
         </div>
         <div class="institution-info">
-            <h1>اسم المؤسسة</h1>
-            <p>العنوان: شارع المثال، المدينة، الدولة</p>
-            <p>هاتف: 0123456789 | بريد إلكتروني: info@example.com</p>
+            <h1>    LABO AL- TIBBI </h1>
+            <h3>     CABINET MEDICAL GLOBE TERRESTRE   </h3>
+     
+            <p>  RONDPOINT FARCHA – NDJAMENA – TCHAD   </P>
+            <p> Tel: +235 69 00 08 65 / 69 00 08 64  </P>
       
         </div>
         <div class="logo">
-            <img src="logo.png" alt="شعار المؤسسة اليمين">
+            <img src="logo.jpg" alt="شعار المؤسسة اليمين">
         </div>
     </div>
 
@@ -1487,36 +1550,36 @@ loadResults();
     <!-- بيانات المريض -->
     <!-- بيانات المريض مضغوطة في سطرين -->
 <div class="patient-info">
-    <h2 style="text-align:center;">بيانات المريض</h2>
+    <h2 style="text-align:center;">Informations sur le patient</h2>
     <h3>
-        <strong>الاسم:</strong> ${result.patientName}
-        </h3
+        <strong>Nom :</strong> ${result.patientName}
+    </h3>
     <p>
-         
-        <strong>العمر:</strong> ${result.patientAge} | 
-        <strong>الجنس:</strong> ${result.patientGender}
+        <strong>Âge :</strong> ${result.patientAge} | 
+        <strong>Sexe :</strong> ${result.patientGender}
     </p>
     <p>
-        <strong>رقم الملف:</strong> ${result.patientID} | 
-        <strong>تاريخ التقرير:</strong> ${formatDate(new Date(result.date))}
+        <strong>Numéro de dossier :</strong> ${result.patientID} | 
+        <strong>Date du rapport :</strong> ${formatDate(new Date(result.date))}
     </p>
 </div>
 
   
     <!-- جدول نتائج الفحوصات -->
-    <h2 style="text-align:center;">نتائج الفحوصات</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>اسم الفحص</th>
-                <th>النتيجة</th>
-                <th>الوحدة</th>
-                <th>القيمة المرجعية</th>
-                <th>السعر</th>
-                <th>ملاحظات</th>
-            </tr>
-        </thead>
-        <tbody>
+    <h2 style="text-align:center;">Résultats des tests</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Nom du test</th>
+            <th>Résultat</th>
+            <th>Unité</th>
+            <th>Valeur de référence</th>
+            <th>Prix</th>
+            <th>Remarques</th>
+        </tr>
+    </thead>
+    <tbody>
+
 `;
  
 
@@ -1527,7 +1590,7 @@ loadResults();
                             <td>${test.result}</td>
                             <td>${test.unit || ''}</td>
                             <td>${test.reference || ''}</td>
-                            <td>${test.price ? test.price.toFixed(2) + ' ريال' : ''}</td>
+                            <td>${test.price ? test.price.toFixed(2) + ' XAF' : ''}</td>
                             <td>${test.notes || ''}</td>
                         </tr>
                     `;
@@ -1537,21 +1600,28 @@ loadResults();
                             </tbody>
                             <tfoot>
                                 <tr class="total-row">
-                                    <td colspan="4" style="text-align: left;">المبلغ الإجمالي:</td>
-                                    <td>${totalAmount.toFixed(2)} ريال</td>
+                             
+                                    <td colspan="4" style="text-align: left;">Montant total :</td>
+
+                                    <td>${totalAmount.toFixed(2)} XAF</td>
                                     <td></td>
                                 </tr>
                             </tfoot>
                         </table>
                         
                         <div class="footer">
-                            <p>تم إنشاء هذا التقرير بواسطة نظام إدارة المختبر</p>
-                            <p>تاريخ الطباعة: ${formatDate(new Date())}</p>
+                             
+                            <p>Ce rapport a été généré par le système de gestion du laboratoire</p>
+
+                  
+                            <p>Date d'impression : ${formatDate(new Date())}</p>
+
                         </div>
                         
                         <div class="no-print" style="text-align: center; margin-top: 20px;">
-                            <button onclick="window.print()">طباعة التقرير</button>
-                            <button onclick="window.close()">إغلاق</button>
+                          <button onclick="window.print()">Imprimer le rapport</button>
+<button onclick="window.close()">Fermer</button>
+
                         </div>
                     </body>
                     </html>
@@ -1563,7 +1633,9 @@ loadResults();
             };
             
             request.onerror = function(event) {
-                showAlert("حدث خطأ أثناء تحميل بيانات الطباعة: " + event.target.errorCode, "error");
+                // showAlert("حدث خطأ أثناء تحميل بيانات الطباعة: " + event.target.errorCode, "error");
+                showAlert("Une erreur est survenue lors du chargement des données d'impression : " + event.target.errorCode, "error");
+
             };
         }
 
